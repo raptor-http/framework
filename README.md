@@ -137,6 +137,10 @@ The following errors are currently available to import and throw from within the
 * `BadRequest`
 * `ServerError`
 * `TypeError`
+* `Unauthorized`
+* `Forbidden`
+* `Unprocessable Entity`
+* `Method Not Allowed`
 
 You can create your own errors by implementing the `Error` interface.
 
