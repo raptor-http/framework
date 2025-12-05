@@ -207,7 +207,9 @@ npx wrangler deploy
 
 Raptor is built as an unopinionated modular framework, giving you the flexibility to choose which components to include. Below is a list of available first-party extensions:
 
-* Router Middleware: [https://jsr.io/@raptor/router](https://jsr.io/@raptor/router)
+* Router middleware: [https://jsr.io/@raptor/router](https://jsr.io/@raptor/router)
+* Error handler: [https://jsr.io/@raptor/error](https://jsr.io/@raptor/error)
+* Static file handler: [https://jsr.io/@raptor/static](https://jsr.io/@raptor/static)
 
 ## License
 
