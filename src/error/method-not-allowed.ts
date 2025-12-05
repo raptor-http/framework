@@ -7,13 +7,10 @@ export default class MethodNotAllowed extends Error implements Error {
    */
   public status: number = 405;
 
-  public errors: string[];
-
-  constructor(errors: string[], message?: string) {
+  constructor(message?: string) {
     super();
 
     this.name = "Method Not Allowed";
     this.message = message ?? "Request method not permitted";
-    this.errors = errors;
   }
 }

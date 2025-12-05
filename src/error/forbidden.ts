@@ -7,13 +7,10 @@ export default class Forbidden extends Error implements Error {
    */
   public status: number = 403;
 
-  public errors: string[];
-
-  constructor(errors: string[], message?: string) {
+  constructor(message?: string) {
     super();
 
     this.name = "Forbidden";
     this.message = message ?? "Server refused request";
-    this.errors = errors;
   }
 }

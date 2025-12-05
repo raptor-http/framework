@@ -7,13 +7,10 @@ export default class Unauthorized extends Error implements Error {
    */
   public status: number = 401;
 
-  public errors: string[];
-
-  constructor(errors: string[], message?: string) {
+  constructor(message?: string) {
     super();
 
     this.name = "Unauthorized";
     this.message = message ?? "Authentication required";
-    this.errors = errors;
   }
 }
