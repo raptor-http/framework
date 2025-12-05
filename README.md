@@ -134,9 +134,9 @@ Errors thrown in middleware are picked up and added to the `Context` object, all
 The following errors are currently available to import and throw from within the framework:
 
 * `NotFound`
-* `BadRequest`
-* `ServerError`
-* `TypeError`
+* `Bad Request`
+* `Server Error`
+* `Type Error`
 * `Unauthorized`
 * `Forbidden`
 * `Unprocessable Entity`
