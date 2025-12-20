@@ -7,10 +7,19 @@ export default class UnprocessableEntity extends Error implements Error {
    */
   public status: number = 422;
 
-  constructor(message?: string) {
+  /**
+   * Validation errors keyed by field name.
+   */
+  public errors: Record<string, string[]>;
+
+  constructor(
+    errors: Record<string, string[]>,
+    message?: string,
+  ) {
     super();
 
     this.name = "Unprocessable Entity";
     this.message = message ?? "Semantic errors in request";
+    this.errors = errors;
   }
 }
