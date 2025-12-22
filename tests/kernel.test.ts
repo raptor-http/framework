@@ -95,7 +95,7 @@ Deno.test("test middleware catches 404 error", async () => {
 
   assertEquals(
     await response.text(),
-    "The resource requested could not be found",
+    "Not Found - The resource requested could not be found",
   );
 });
 
@@ -110,7 +110,7 @@ Deno.test("test middleware catches server error", async () => {
 
   assertEquals(
     await response.text(),
-    "There was an unexpected error handling your request",
+    "Server Error - There was an unexpected error handling your request",
   );
 });
 
@@ -128,7 +128,7 @@ Deno.test("test middleware catches bad request error", async () => {
 
   assertEquals(
     await response.text(),
-    "There was an issue handling your request",
+    "Bad Request - There was an issue handling your request",
   );
 });
 
@@ -145,7 +145,7 @@ Deno.test("test kernel automatically catches error", async () => {
 
   assertEquals(
     await response.text(),
-    "The resource requested could not be found",
+    "Not Found - The resource requested could not be found",
   );
 });
 
@@ -160,7 +160,7 @@ Deno.test("test kernel automatically catches error by default", async () => {
 
   assertEquals(
     await response.text(),
-    "The resource requested could not be found",
+    "Not Found - The resource requested could not be found",
   );
 });
 

@@ -1,4 +1,4 @@
-import type { Error } from "../error/interfaces/error.ts";
+import type { HttpError } from "../interfaces/http-error.ts";
 
 /**
  * The context definition.
@@ -17,7 +17,7 @@ export default class Context {
   /**
    * An error caught by the system.
    */
-  public error?: Error;
+  public error?: HttpError;
 
   /**
    * Initialise an HTTP context.
