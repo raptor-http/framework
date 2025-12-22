@@ -11,14 +11,6 @@ import type { Processor } from "../src/interfaces/processor.ts";
 
 const APP_URL = "http://localhost:8000";
 
-Deno.test("test kernel initialises default options", () => {
-  const app = new Kernel();
-
-  assertEquals(app["options"], {
-    catchErrors: true,
-  });
-});
-
 Deno.test("test kernel handles plain text HTTP response", async () => {
   const app = new Kernel();
 
@@ -133,9 +125,7 @@ Deno.test("test middleware catches bad request error", async () => {
 });
 
 Deno.test("test kernel automatically catches error", async () => {
-  const app = new Kernel({
-    catchErrors: true,
-  });
+  const app = new Kernel();
 
   app.add((_ctx: Context) => {
     throw new NotFound();
@@ -165,9 +155,7 @@ Deno.test("test kernel automatically catches error by default", async () => {
 });
 
 Deno.test("test kernel does not automatically catch error", async () => {
-  const app = new Kernel({
-    catchErrors: false,
-  });
+  const app = new Kernel();
 
   app.add((_ctx: Context) => {
     throw new NotFound();
