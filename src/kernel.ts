@@ -1,6 +1,7 @@
 // deno-lint-ignore-file
 
 import Context from "./http/context.ts";
+import { HttpError } from "./interfaces/http-error.ts";
 import ResponseManager from "./http/response-manager.ts";
 import { KernelOptions } from "./interfaces/kernel-options.ts";
 
@@ -192,7 +193,10 @@ export default class Kernel {
       return this.internalErrorHandler(error as Error, context);
     }
 
-    const errorBody = await this.customErrorHandler(error as Error, context);
+    const errorBody = await this.customErrorHandler(
+      error as HttpError,
+      context,
+    );
 
     await this.processMiddlewareResponse(errorBody, context);
   }
