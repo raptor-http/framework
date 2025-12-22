@@ -3,17 +3,11 @@
 import Context from "./http/context.ts";
 import { HttpError } from "./interfaces/http-error.ts";
 import ResponseManager from "./http/response-manager.ts";
-import { KernelOptions } from "./interfaces/kernel-options.ts";
 
 /**
  * The root initialiser for the framework.
  */
 export default class Kernel {
-  /**
-   * Optional configuration options for the kernel.
-   */
-  private options?: KernelOptions;
-
   /**
    * The response manager for the kernel.
    */
@@ -34,9 +28,7 @@ export default class Kernel {
    *
    * @constructor
    */
-  constructor(options?: KernelOptions) {
-    this.options = this.initialiseDefaultOptions(options);
-
+  constructor() {
     this.responseManager = new ResponseManager();
   }
 
@@ -99,18 +91,6 @@ export default class Kernel {
    */
   public catch(middleware: CallableFunction): void {
     this.customErrorHandler = middleware;
-  }
-
-  /**
-   * Initialise the default kernel options.
-   *
-   * @param options Optional kernel options object.
-   * @returns A new kernel options object with defaults.
-   */
-  private initialiseDefaultOptions(options?: KernelOptions): KernelOptions {
-    return {
-      ...options,
-    };
   }
 
   /**
