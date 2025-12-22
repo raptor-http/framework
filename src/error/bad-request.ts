@@ -1,7 +1,9 @@
+import type { HttpError } from "../interfaces/http-error.ts";
+
 /**
  * An error used primarily in 400 bad request errors.
  */
-export default class BadRequest extends Error {
+export default class BadRequest extends Error implements HttpError {
   /**
    * The HTTP status code associated with the error.
    */

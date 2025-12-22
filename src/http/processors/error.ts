@@ -2,6 +2,7 @@
 
 import type Context from "../context.ts";
 import type { Processor } from "../../interfaces/processor.ts";
+import type { HttpError } from "../../interfaces/http-error.ts";
 
 /**
  * The plain text processor for HTTP responses.
@@ -21,14 +22,30 @@ export default class ErrorProcessor implements Processor {
   }
 
   /**
+   * Check if it's an HTTP Error.
+   *
+   * @param error The error to check against.
+   * @returns A boolean indicating whether it's an HTTP error.
+   */
+  private isHttpError(error: Error): error is HttpError {
+    return (
+      "status" in error &&
+      typeof (error as any).status === "number"
+    );
+  }
+
+  /**
    * Transform the response based on request content type and accept headers.
    *
    * @param error The error in the request.
    * @param context The context of the request.
    * @returns A valid response object in appropriate content type.
    */
-  private transformResponse(error: any, context: Context): Response {
+  private transformResponse(error: Error, context: Context): Response {
     const contentType = this.detectAppropriateContentType(context);
+
+    const status = this.isHttpError(error) ? error.status : 500;
+    const errors = this.isHttpError(error) ? error.errors : undefined;
 
     let body;
 
@@ -37,8 +54,8 @@ export default class ErrorProcessor implements Processor {
         body = JSON.stringify({
           name: error.name,
           message: error.message,
-          status: error.status ?? 500,
-          ...(error.errors && { errors: error.errors })
+          status,
+          errors,
         });
         break;
 
@@ -52,10 +69,13 @@ export default class ErrorProcessor implements Processor {
         break;
     }
 
-    context.response.headers.set("content-type", `${contentType}; charset=utf-8`);
+    context.response.headers.set(
+      "content-type",
+      `${contentType}; charset=utf-8`,
+    );
 
     return new Response(body, {
-      status: error.status ?? 500,
+      status: this.isHttpError(error) ? error.status : 500,
       headers: context.response.headers,
     });
   }
@@ -98,7 +118,7 @@ export default class ErrorProcessor implements Processor {
 
   /**
    * Extract base media type without parameters.
-   * 
+   *
    * @param contentType The content type to retrieve the base type from.
    * @returns The base media type without any parameters.
    */
@@ -121,30 +141,30 @@ export default class ErrorProcessor implements Processor {
 
   /**
    * Parse Accept header and return types sorted by quality value.
-   * 
+   *
    * @param header The header to parse.
    * @returns An array of headers sorted by quality value.
    */
   private parseAcceptHeader(header: string): string[] {
     return header
       .split(",")
-      .map(part => {
+      .map((part) => {
         const [type, ...params] = part.trim().split(";");
-        const qMatch = params.find(p => p.trim().startsWith("q="));
+        const qMatch = params.find((p) => p.trim().startsWith("q="));
         const q = qMatch ? parseFloat(qMatch.split("=")[1]) : 1.0;
 
         return {
           type: type.trim(),
-          q
+          q,
         };
       })
       .sort((a, b) => b.q - a.q)
-      .map(item => item.type);
+      .map((item) => item.type);
   }
 
   /**
    * Escape HTML special characters to prevent XSS.
-   * 
+   *
    * @param text The text to escape.
    * @returns A safe HTML string.
    */
@@ -160,11 +180,11 @@ export default class ErrorProcessor implements Processor {
   }
 
   /**
- * Generate a basic HTML body for the error.
- *
- * @param error The error to render in HTML.
- * @returns An HTML formatted string.
- */
+   * Generate a basic HTML body for the error.
+   *
+   * @param error The error to render in HTML.
+   * @returns An HTML formatted string.
+   */
   private generateBasicHtmlBody(
     error: Error & { errors?: Record<string, string[]> },
   ): string {
@@ -181,7 +201,7 @@ export default class ErrorProcessor implements Processor {
 
   /**
    * Generate the HTML head section.
-   * 
+   *
    * @param title The page title.
    * @returns The HTML head section.
    */
@@ -198,7 +218,7 @@ export default class ErrorProcessor implements Processor {
 
   /**
    * Generate the CSS styles for the error page.
-   * 
+   *
    * @returns The style tag with CSS.
    */
   private generateHtmlStyles(): string {
@@ -217,7 +237,7 @@ export default class ErrorProcessor implements Processor {
 
   /**
    * Generate the main content body.
-   * 
+   *
    * @param error The error object.
    * @returns The HTML body content.
    */
@@ -235,7 +255,7 @@ export default class ErrorProcessor implements Processor {
 
   /**
    * Generate the validation errors list if present.
-   * 
+   *
    * @param errors The errors object.
    * @returns HTML for the errors list or empty string.
    */
@@ -246,7 +266,7 @@ export default class ErrorProcessor implements Processor {
 
     const items = Object.entries(errors)
       .flatMap(([field, messages]) =>
-        messages.map(message =>
+        messages.map((message) =>
           `<li>
             <strong>
               ${this.escapeHtml(field)}:

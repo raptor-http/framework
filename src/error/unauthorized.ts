@@ -1,7 +1,9 @@
+import type { HttpError } from "../interfaces/http-error.ts";
+
 /**
  * An error used primarily in 401 unauthorized request errors.
  */
-export default class Unauthorized extends Error {
+export default class Unauthorized extends Error implements HttpError {
   /**
    * The HTTP status code associated with the error.
    */

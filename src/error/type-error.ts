@@ -1,7 +1,9 @@
+import type { HttpError } from "../interfaces/http-error.ts";
+
 /**
  * An error used primarily for application code errors.
  */
-export default class TypeError extends Error {
+export default class TypeError extends Error implements HttpError {
   /**
    * The HTTP status code associated with the error.
    */

@@ -1,7 +1,7 @@
 /**
  * The base error definition.
  */
-export interface Error {
+export interface HttpError<T = unknown> extends Error {
   /**
    * The name of the error.
    */
@@ -20,7 +20,7 @@ export interface Error {
   /**
    * Any optional error messages associated with the error.
    */
-  errors?: string[];
+  errors?: T;
 
   /**
    * The stack string associated with the error.
