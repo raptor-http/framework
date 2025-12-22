@@ -1,7 +1,7 @@
 /**
  * An error used primarily for application code errors.
  */
-export default class TypeError extends Error implements Error {
+export default class TypeError extends Error {
   /**
    * The HTTP status code associated with the error.
    */

@@ -1,7 +1,7 @@
 /**
  * An error used primarily in 422 unprocessable entity request errors.
  */
-export default class UnprocessableEntity extends Error implements Error {
+export default class UnprocessableEntity extends Error {
   /**
    * The HTTP status code associated with the error.
    */

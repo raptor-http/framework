@@ -7,7 +7,7 @@ import type Context from "../src/http/context.ts";
 import BadRequest from "../src/error/bad-request.ts";
 import ServerError from "../src/error/server-error.ts";
 import ResponseManager from "../src/http/response-manager.ts";
-import type { Processor } from "../src/http/interfaces/processor.ts";
+import type { Processor } from "../src/interfaces/processor.ts";
 
 const APP_URL = "http://localhost:8000";
 

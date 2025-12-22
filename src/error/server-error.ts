@@ -1,7 +1,7 @@
 /**
  * An error used primarily in 500 server errors.
  */
-export default class ServerError extends Error implements Error {
+export default class ServerError extends Error {
   /**
    * The HTTP status code associated with the error.
    */

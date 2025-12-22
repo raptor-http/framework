@@ -2,7 +2,6 @@
 
 import Context from "./http/context.ts";
 import { KernelOptions } from "./kernel-options.ts";
-import type { Error } from "./error/interfaces/error.ts";
 import ResponseManager from "./http/response-manager.ts";
 
 /**
@@ -25,9 +24,9 @@ export default class Kernel {
   private middleware: CallableFunction[] = [];
 
   /**
-   * An optional custom error middleware function.
+   * An optional custom error handler function.
    */
-  private errorMiddleware?: CallableFunction;
+  private customErrorHandler?: CallableFunction;
 
   /**
    * Initialise the kernel.
@@ -98,7 +97,7 @@ export default class Kernel {
    * @returns void
    */
   public catch(middleware: CallableFunction): void {
-    this.errorMiddleware = middleware;
+    this.customErrorHandler = middleware;
   }
 
   /**
@@ -158,6 +157,7 @@ export default class Kernel {
 
       await this.processMiddlewareResponse(body, context);
     } catch (error) {
+      console.log(error);
       await this.processUncaughtError(error as Error, context);
     }
   }
@@ -188,13 +188,11 @@ export default class Kernel {
     error: Error,
     context: Context,
   ): Promise<void> {
-    if (this.options?.catchErrors || !this.errorMiddleware) {
-      await this.uncaughtErrorHandler(error as Error, context);
-
-      return;
+    if (this.options?.catchErrors || !this.customErrorHandler) {
+      return this.internalErrorHandler(error as Error, context);
     }
 
-    const errorBody = await this.errorMiddleware(error as Error, context);
+    const errorBody = await this.customErrorHandler(error as Error, context);
 
     await this.processMiddlewareResponse(errorBody, context);
   }
@@ -206,15 +204,10 @@ export default class Kernel {
    * @param context The current HTTP context object.
    * @returns Promise<void>
    */
-  private async uncaughtErrorHandler(
+  private async internalErrorHandler(
     error: Error,
     context: Context,
   ): Promise<void> {
-    context.response = new Response(
-      error.message,
-      {
-        status: error.status || 500,
-      },
-    );
+    return this.processMiddlewareResponse(error, context);
   }
 }

@@ -1,7 +1,7 @@
 /**
  * An error used primarily in 400 bad request errors.
  */
-export default class BadRequest extends Error implements Error {
+export default class BadRequest extends Error {
   /**
    * The HTTP status code associated with the error.
    */

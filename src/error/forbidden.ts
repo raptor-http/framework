@@ -1,7 +1,7 @@
 /**
  * An error used primarily in 403 forbidden request errors.
  */
-export default class Forbidden extends Error implements Error {
+export default class Forbidden extends Error {
   /**
    * The HTTP status code associated with the error.
    */

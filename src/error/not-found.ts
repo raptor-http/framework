@@ -1,7 +1,7 @@
 /**
  * An error used primarily in 404 not found request errors.
  */
-export default class NotFound extends Error implements Error {
+export default class NotFound extends Error {
   /**
    * The HTTP status code associated with the error.
    */

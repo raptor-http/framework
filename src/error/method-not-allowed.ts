@@ -1,7 +1,7 @@
 /**
  * An error used primarily in 405 method not allowed request errors.
  */
-export default class MethodNotAllowed extends Error implements Error {
+export default class MethodNotAllowed extends Error {
   /**
    * The HTTP status code associated with the error.
    */

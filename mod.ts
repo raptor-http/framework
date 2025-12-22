@@ -12,8 +12,8 @@ import MethodNotAllowed from "./src/error/method-not-allowed.ts";
 import UnprocessableEntity from "./src/error/unprocessable-entity.ts";
 
 // Export all available interfaces/types.
-export type { Error } from "./src/error/interfaces/error.ts";
-export type { Processor } from "./src/http/interfaces/processor.ts";
+export type { Error } from "./src/interfaces/error.ts";
+export type { Processor } from "./src/interfaces/processor.ts";
 
 export {
   BadRequest,

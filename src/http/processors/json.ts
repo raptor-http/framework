@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
 
 import type Context from "../context.ts";
-import type { Processor } from "../interfaces/processor.ts";
+import type { Processor } from "../../interfaces/processor.ts";
 
 /**
  * The JSON object processor for HTTP responses.
