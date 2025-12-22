@@ -88,6 +88,7 @@ export default class ErrorProcessor implements Processor {
 
     if (contentTypeHeader) {
       const baseType = this.getBaseMediaType(contentTypeHeader);
+
       if (this.isJsonType(baseType)) return "application/json";
       if (baseType === "text/html") return "text/html";
     }
@@ -131,7 +132,11 @@ export default class ErrorProcessor implements Processor {
         const [type, ...params] = part.trim().split(";");
         const qMatch = params.find(p => p.trim().startsWith("q="));
         const q = qMatch ? parseFloat(qMatch.split("=")[1]) : 1.0;
-        return { type: type.trim(), q };
+
+        return {
+          type: type.trim(),
+          q
+        };
       })
       .sort((a, b) => b.q - a.q)
       .map(item => item.type);

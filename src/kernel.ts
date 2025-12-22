@@ -1,8 +1,8 @@
 // deno-lint-ignore-file
 
 import Context from "./http/context.ts";
-import { KernelOptions } from "./kernel-options.ts";
 import ResponseManager from "./http/response-manager.ts";
+import { KernelOptions } from "./interfaces/kernel-options.ts";
 
 /**
  * The root initialiser for the framework.
