@@ -109,7 +109,6 @@ export default class Kernel {
    */
   private initialiseDefaultOptions(options?: KernelOptions): KernelOptions {
     return {
-      catchErrors: true,
       ...options,
     };
   }
@@ -189,7 +188,7 @@ export default class Kernel {
     error: Error,
     context: Context,
   ): Promise<void> {
-    if (this.options?.catchErrors || !this.customErrorHandler) {
+    if (!this.customErrorHandler) {
       return this.internalErrorHandler(error as Error, context);
     }
 
