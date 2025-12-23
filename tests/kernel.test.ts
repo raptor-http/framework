@@ -161,8 +161,8 @@ Deno.test("test kernel does not automatically catch error", async () => {
     throw new NotFound();
   });
 
-  app.catch((error: Error) => {
-    if (error instanceof NotFound) {
+  app.catch((context: Context) => {
+    if (context.error instanceof NotFound) {
       return new Response(
         JSON.stringify({
           message: "Nothing was found",

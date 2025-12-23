@@ -185,9 +185,7 @@ export default class Kernel {
    * @param context The current HTTP context object.
    * @returns Promise<void>
    */
-  private async internalErrorHandler(
-    context: Context,
-  ): Promise<void> {
+  private async internalErrorHandler(context: Context): Promise<void> {
     return this.processMiddlewareResponse(context.error, context);
   }
 }
