@@ -42,7 +42,7 @@ export default class ErrorProcessor implements Processor {
    * @returns A valid response object in appropriate content type.
    */
   private transformResponse(error: Error, context: Context): Response {
-    const contentType = this.detectAppropriateContentType(context);
+    const contentType = context.detectAppropriateContentType();
 
     const status = this.isHttpError(error) ? error.status : 500;
     const errors = this.isHttpError(error) ? error.errors : undefined;
@@ -78,88 +78,6 @@ export default class ErrorProcessor implements Processor {
       status: this.isHttpError(error) ? error.status : 500,
       headers: context.response.headers,
     });
-  }
-
-  /**
-   * Detect what content type is best for the response.
-   *
-   * @param context The context of the request.
-   * @returns An appropriate content type for the request.
-   */
-  private detectAppropriateContentType(context: Context): string {
-    const acceptHeader = context.request.headers.get("accept");
-    const contentTypeHeader = context.request.headers.get("content-type");
-
-    if (acceptHeader && acceptHeader !== "*/*") {
-      const acceptedTypes = this.parseAcceptHeader(acceptHeader);
-
-      for (const type of acceptedTypes) {
-        const baseType = this.getBaseMediaType(type);
-
-        if (this.isJsonType(baseType)) return "application/json";
-        if (baseType === "text/html") return "text/html";
-        if (baseType === "text/plain") return "text/plain";
-        if (baseType.startsWith("text/")) return "text/plain";
-        if (baseType === "application/*" || baseType === "*/*") {
-          return "text/plain";
-        }
-      }
-    }
-
-    if (contentTypeHeader) {
-      const baseType = this.getBaseMediaType(contentTypeHeader);
-
-      if (this.isJsonType(baseType)) return "application/json";
-      if (baseType === "text/html") return "text/html";
-    }
-
-    return "text/plain";
-  }
-
-  /**
-   * Extract base media type without parameters.
-   *
-   * @param contentType The content type to retrieve the base type from.
-   * @returns The base media type without any parameters.
-   */
-  private getBaseMediaType(contentType: string): string {
-    return contentType.split(";")[0].trim().toLowerCase();
-  }
-
-  /**
-   * Check if a content type is JSON or JSON-based.
-   *
-   * @param contentType The content type to check for JSON.
-   * @returns A boolean indicating whether the content type is JSON.
-   */
-  private isJsonType(contentType: string): boolean {
-    return contentType === "application/json" ||
-      contentType === "application/hal+json" ||
-      contentType === "application/problem+json" ||
-      contentType.endsWith("+json");
-  }
-
-  /**
-   * Parse Accept header and return types sorted by quality value.
-   *
-   * @param header The header to parse.
-   * @returns An array of headers sorted by quality value.
-   */
-  private parseAcceptHeader(header: string): string[] {
-    return header
-      .split(",")
-      .map((part) => {
-        const [type, ...params] = part.trim().split(";");
-        const qMatch = params.find((p) => p.trim().startsWith("q="));
-        const q = qMatch ? parseFloat(qMatch.split("=")[1]) : 1.0;
-
-        return {
-          type: type.trim(),
-          q,
-        };
-      })
-      .sort((a, b) => b.q - a.q)
-      .map((item) => item.type);
   }
 
   /**

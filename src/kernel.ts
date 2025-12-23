@@ -137,8 +137,8 @@ export default class Kernel {
 
       await this.processMiddlewareResponse(body, context);
     } catch (error) {
-      console.log(error);
-      await this.processUncaughtError(error as Error, context);
+      context.error = error as Error | HttpError;
+      await this.processUncaughtError(context);
     }
   }
 
@@ -165,15 +165,13 @@ export default class Kernel {
    * @returns Promise<void>
    */
   private async processUncaughtError(
-    error: Error,
     context: Context,
   ): Promise<void> {
     if (!this.customErrorHandler) {
-      return this.internalErrorHandler(error as Error, context);
+      return this.internalErrorHandler(context);
     }
 
     const errorBody = await this.customErrorHandler(
-      error as HttpError,
       context,
     );
 
@@ -188,9 +186,8 @@ export default class Kernel {
    * @returns Promise<void>
    */
   private async internalErrorHandler(
-    error: Error,
     context: Context,
   ): Promise<void> {
-    return this.processMiddlewareResponse(error, context);
+    return this.processMiddlewareResponse(context.error, context);
   }
 }
