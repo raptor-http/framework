@@ -25,9 +25,15 @@ export default class JsonProcessor implements Processor {
       context.response.headers.set("content-type", "application/json");
     }
 
-    return new Response(JSON.stringify(body), {
-      status: context.response.status,
-      headers: context.response.headers,
-    });
+    try {
+      const jsonBody = JSON.stringify(body);
+
+      return new Response(jsonBody, {
+        status: context.response.status,
+        headers: context.response.headers,
+      });
+    } catch (_error) {
+      return null;
+    }
   }
 }

@@ -41,7 +41,8 @@ export default class ResponseManager {
    * @returns void
    */
   public addProcessor(processor: Processor, weight: number = 0): void {
-    this.processors.splice(weight, 0, processor);
+    const validatedWeight = Math.max(0, Math.min(weight, this.processors.length));
+    this.processors.splice(validatedWeight, 0, processor);
   }
 
   /**
