@@ -171,11 +171,13 @@ export default class Kernel {
       return this.internalErrorHandler(context);
     }
 
-    const errorBody = await this.customErrorHandler(
-      context,
-    );
-
-    await this.processMiddlewareResponse(errorBody, context);
+    try {
+      const errorBody = await this.customErrorHandler(context);
+      await this.processMiddlewareResponse(errorBody, context);
+    } catch (error) {
+      // Fall back to internal handler if custom handler fails.
+      return this.internalErrorHandler(context);
+    }
   }
 
   /**
