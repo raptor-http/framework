@@ -42,6 +42,15 @@ export default class Kernel {
   }
 
   /**
+   * Alias method for "add".
+   *
+   * @param middleware An HTTP middleware instance.
+   */
+  public use(middleware: CallableFunction) {
+    this.add(middleware);
+  }
+
+  /**
    * Serve the application.
    *
    * @param options Server options.
@@ -56,6 +65,15 @@ export default class Kernel {
     }
 
     Deno.serve({ port: options.port }, handler);
+  }
+
+  /**
+   * Alias method for "serve".
+   *
+   * @param options Server options.
+   */
+  public listen(options?: { port?: number }) {
+    this.serve(options);
   }
 
   /**
