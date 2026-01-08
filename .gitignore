@@ -4,3 +4,6 @@ coverage-report
 # Ignore example directories.
 example
 public
+
+# Ignore dependencies
+node_modules

@@ -1,0 +1,21 @@
+{
+  "name": "@raptor-http/framework",
+  "version": "0.14.0",
+  "type": "module",
+  "exports": "./mod.ts",
+  "private": false,
+  "publish": {
+    "exclude": [
+      ".github",
+      "examples",
+      "docs",
+      "**/*.test.ts"
+    ]
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

@@ -1,8 +1,13 @@
 // deno-lint-ignore-file
 
 import Context from "./http/context.ts";
-import { HttpError } from "./interfaces/http-error.ts";
+import BunServer from "./server/adapters/bun.ts";
+import ServerError from "./error/server-error.ts";
+import NodeServer from "./server/adapters/node.ts";
+import DenoServer from "./server/adapters/deno.ts";
 import ResponseManager from "./http/response-manager.ts";
+import type { HttpError } from "./interfaces/http-error.ts";
+import type { ServerAdapter } from "./interfaces/server-adapter.ts";
 
 /**
  * The root initialiser for the framework.
@@ -56,15 +61,17 @@ export default class Kernel {
    * @param options Server options.
    */
   public serve(options?: { port?: number }) {
+    const server = this.getServerAdapter();
+
     const handler = (request: Request) => this.respond(request);
 
     if (!options?.port) {
-      Deno.serve(handler);
+      server.serve(handler);
 
       return;
     }
 
-    Deno.serve({ port: options.port }, handler);
+    server.serve(handler, { port: options.port ?? 80 });
   }
 
   /**
@@ -83,7 +90,6 @@ export default class Kernel {
    * @returns A promise resolving the HTTP response.
    */
   public async respond(request: Request): Promise<Response> {
-    // Create a new context for this request
     const context = new Context(request.clone(), new Response());
 
     await this.next(context);
@@ -122,12 +128,12 @@ export default class Kernel {
   }
 
   /**
-   * Execute a chosen middleware by index.
-   *
-   * @param context The current HTTP context.
-   * @param index The current middleware index.
-   * @returns Promise<void>
-   */
+ * Execute a chosen middleware by index.
+ *
+ * @param context The current HTTP context.
+ * @param index The current middleware index.
+ * @returns Promise<Response | void>
+ */
   private async executeMiddleware(
     context: Context,
     index: number,
@@ -136,26 +142,31 @@ export default class Kernel {
 
     const middleware = this.middleware[index];
 
+    if (!middleware) return;
+    
     let called = false;
 
-    const next = async () => {
-      if (called) return;
+    const next = async (): Promise<Response | void> => {
+      if (called) {
+        throw new ServerError("next() called multiple times");
+      }
 
       called = true;
 
-      index++;
-
-      await this.executeMiddleware(context, index);
+      return await this.executeMiddleware(context, index + 1);
     };
 
     try {
       const body = await middleware(context, next);
 
-      if (called || !body) return;
+      if (called) return;
+
+      if (!body) return;
 
       await this.processMiddlewareResponse(body, context);
     } catch (error) {
       context.error = error as Error | HttpError;
+
       await this.processUncaughtError(context);
     }
   }
@@ -207,5 +218,25 @@ export default class Kernel {
    */
   private async internalErrorHandler(context: Context): Promise<void> {
     return this.processMiddlewareResponse(context.error, context);
+  }
+
+  /**
+   * Detect the runtime and return correct adapter.
+   *
+   * @returns A server adapter implementation.
+   */
+  private getServerAdapter(): ServerAdapter {
+    const Bun = (globalThis as any).Bun;
+    const Deno = (globalThis as any).Deno;
+
+    if (typeof Deno !== "undefined") {
+      return new DenoServer();
+    }
+
+    if (typeof Bun !== "undefined") {
+      return new BunServer();
+    }
+
+    return new NodeServer();
   }
 }
