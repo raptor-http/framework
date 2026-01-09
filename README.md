@@ -11,11 +11,11 @@
 
 ## Raptor Framework
 
-Raptor is a lightweight middleware framework for Deno, focusing on readability and clear code. It balances functionality and simplicity, enabling you to express complex logic concisely.
+Raptor is middleware framework for developers who believe code should explain itself. Write less, express more, maintain easily.
 
 ### Installation
 
-To start using Raptor, simply install it through the CLI or import it directly from JSR.
+To start using Raptor, simply install it through the CLI or import it directly from JSR or NPM.
 
 #### Using the Deno CLI
 
@@ -28,11 +28,17 @@ deno add jsr:@raptor/framework
 Raptor is also available to import directly via JSR:
 [https://jsr.io/@raptor/framework](https://jsr.io/@raptor/framework)
 
+#### Using NPM
+
+```
+npm install @raptor-http/framework
+```
+
 ## Documentation
 
 Full documentation can be found on [https://raptorframework.com/docs](https://raptorframework.com/docs).
 
 ## License
 
-_Copyright 2025, @briward. All rights reserved. The framework is licensed under
+_Copyright 2026, @briward. All rights reserved. The framework is licensed under
 the MIT license._
