@@ -3,6 +3,7 @@
 import type Context from "../context.ts";
 import type { Processor } from "../../interfaces/processor.ts";
 import type { HttpError } from "../../interfaces/http-error.ts";
+import console from "node:console";
 
 /**
  * The plain text processor for HTTP responses.
@@ -17,6 +18,8 @@ export default class ErrorProcessor implements Processor {
    */
   public process(body: any, context: Context): Response | null {
     if (!(body instanceof Error)) return null;
+
+    console.log(body);
 
     return this.transformResponse(body, context);
   }
@@ -149,6 +152,13 @@ export default class ErrorProcessor implements Processor {
           padding: 0 1rem; 
         }
         h1 { color: #d32f2f; }
+        .message {
+          background: #fcfcfc;
+          border: 1px solid #dedede;
+          border-radius: 0.25rem;
+          padding: 1rem;
+          color: #111111;
+        }
       </style>
     `;
   }
@@ -166,7 +176,8 @@ export default class ErrorProcessor implements Processor {
 
     return `
       <h1>${this.escapeHtml(error.name)}</h1>
-      <p>${this.escapeHtml(error.message)}</p>
+      <p class="message">${this.escapeHtml(error.message)}</p>
+      <p>Please check the logs for more information.</p>
       ${errorsList}
     `;
   }

@@ -1,4 +1,6 @@
-// deno-lint-ignore-file no-explicit-any
+/// <reference lib="deno.ns" />
+// deno-lint-ignore-file
+
 import { assertEquals } from "jsr:@std/assert";
 
 import Kernel from "../src/kernel.ts";
@@ -176,7 +178,7 @@ Deno.test("test kernel does not automatically catch error", async () => {
 
   const response = await app.respond(new Request(APP_URL));
 
-  const data = await response.json();
+  const data = await response.json() as { message: string };
 
   assertEquals(data.message, "Nothing was found");
 });

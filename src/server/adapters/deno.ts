@@ -5,13 +5,13 @@ import type { ServerAdapter } from "../../interfaces/server-adapter.ts";
 export default class DenoServer implements ServerAdapter {
   /**
    * Start the server with the given request handler.
-   * 
+   *
    * @param handler The request handler function
    * @param options Server configuration options
    */
   public serve(
     handler: (request: Request) => Promise<Response>,
-    options?: { port?: number; hostname?: string }
+    options?: { port?: number; hostname?: string },
   ): void {
     const Deno = (globalThis as any).Deno;
 
@@ -27,7 +27,7 @@ export default class DenoServer implements ServerAdapter {
 
     Deno.serve({
       port: options.port,
-      hostname: options.hostname
+      hostname: options.hostname,
     }, handler);
   }
 }

@@ -71,7 +71,7 @@ export default class Context {
    * @returns The base media type without any parameters.
    */
   private getBaseMediaType(contentType: string): string {
-    return contentType.split(";")[0].trim().toLowerCase();
+    return contentType.split(";")[0]?.trim().toLowerCase() ?? "";
   }
 
   /**
@@ -98,14 +98,19 @@ export default class Context {
       .split(",")
       .map((part) => {
         const [type, ...params] = part.trim().split(";");
+
+        if (!type) return null;
+
         const qMatch = params.find((p) => p.trim().startsWith("q="));
-        const q = qMatch ? parseFloat(qMatch.split("=")[1]) : 1.0;
+        const qValue = qMatch?.split("=")[1];
+        const q = qValue ? parseFloat(qValue) : 1.0;
 
         return {
           type: type.trim(),
           q,
         };
       })
+      .filter((item): item is { type: string; q: number } => item !== null)
       .sort((a, b) => b.q - a.q)
       .map((item) => item.type);
   }

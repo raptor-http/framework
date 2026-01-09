@@ -60,7 +60,11 @@ export default class ResponseManager {
     context: Context,
   ): Promise<Response> {
     for (let i = 0; i < this.processors.length; i++) {
-      const response = await this.processors[i].process(body, context);
+      const processor = this.processors[i];
+
+      if (!processor) continue;
+
+      const response = await processor.process(body, context);
 
       if (response instanceof Response) {
         return response;

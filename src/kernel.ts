@@ -1,12 +1,11 @@
-// deno-lint-ignore-file
-
 import Context from "./http/context.ts";
 import BunServer from "./server/adapters/bun.ts";
-import ServerError from "./error/server-error.ts";
 import NodeServer from "./server/adapters/node.ts";
 import DenoServer from "./server/adapters/deno.ts";
 import ResponseManager from "./http/response-manager.ts";
 import type { HttpError } from "./interfaces/http-error.ts";
+import type { Middleware } from "./interfaces/middleware.ts";
+import type { ErrorHandler } from "./interfaces/error-handler.ts";
 import type { ServerAdapter } from "./interfaces/server-adapter.ts";
 
 /**
@@ -21,12 +20,12 @@ export default class Kernel {
   /**
    * The available middleware.
    */
-  private middleware: CallableFunction[] = [];
+  private middleware: Middleware[] = [];
 
   /**
    * An optional custom error handler function.
    */
-  private customErrorHandler?: CallableFunction;
+  private customErrorHandler?: ErrorHandler;
 
   /**
    * Initialise the kernel.
@@ -42,7 +41,7 @@ export default class Kernel {
    *
    * @param middleware An HTTP middleware instance.
    */
-  public add(middleware: CallableFunction) {
+  public add(middleware: Middleware) {
     this.middleware.push(middleware);
   }
 
@@ -51,7 +50,7 @@ export default class Kernel {
    *
    * @param middleware An HTTP middleware instance.
    */
-  public use(middleware: CallableFunction) {
+  public use(middleware: Middleware) {
     this.add(middleware);
   }
 
@@ -110,11 +109,11 @@ export default class Kernel {
   /**
    * Add custom error handling middleware.
    *
-   * @param middleware A middleware function to handle errors.
+   * @param handler An error handler function to handle errors.
    * @returns void
    */
-  public catch(middleware: CallableFunction): void {
-    this.customErrorHandler = middleware;
+  public catch(handler: ErrorHandler): void {
+    this.customErrorHandler = handler;
   }
 
   /**
@@ -128,12 +127,12 @@ export default class Kernel {
   }
 
   /**
- * Execute a chosen middleware by index.
- *
- * @param context The current HTTP context.
- * @param index The current middleware index.
- * @returns Promise<Response | void>
- */
+   * Execute a chosen middleware by index.
+   *
+   * @param context The current HTTP context.
+   * @param index The current middleware index.
+   * @returns Promise<void>
+   */
   private async executeMiddleware(
     context: Context,
     index: number,
@@ -143,25 +142,23 @@ export default class Kernel {
     const middleware = this.middleware[index];
 
     if (!middleware) return;
-    
+
     let called = false;
 
-    const next = async (): Promise<Response | void> => {
-      if (called) {
-        throw new ServerError("next() called multiple times");
-      }
+    const next = async () => {
+      if (called) return;
 
       called = true;
 
-      return await this.executeMiddleware(context, index + 1);
+      index++;
+
+      await this.executeMiddleware(context, index);
     };
 
     try {
       const body = await middleware(context, next);
 
-      if (called) return;
-
-      if (!body) return;
+      if (called || !body) return;
 
       await this.processMiddlewareResponse(body, context);
     } catch (error) {
@@ -178,7 +175,7 @@ export default class Kernel {
    * @param context The current HTTP context.
    */
   private async processMiddlewareResponse(
-    body: any,
+    body: unknown,
     context: Context,
   ): Promise<void> {
     const processed = await this.responseManager.process(body, context);
@@ -203,7 +200,7 @@ export default class Kernel {
     try {
       const errorBody = await this.customErrorHandler(context);
       await this.processMiddlewareResponse(errorBody, context);
-    } catch (error) {
+    } catch (_error) {
       // Fall back to internal handler if custom handler fails.
       return this.internalErrorHandler(context);
     }
@@ -216,7 +213,7 @@ export default class Kernel {
    * @param context The current HTTP context object.
    * @returns Promise<void>
    */
-  private async internalErrorHandler(context: Context): Promise<void> {
+  private internalErrorHandler(context: Context): Promise<void> {
     return this.processMiddlewareResponse(context.error, context);
   }
 
@@ -226,7 +223,10 @@ export default class Kernel {
    * @returns A server adapter implementation.
    */
   private getServerAdapter(): ServerAdapter {
+    // deno-lint-ignore no-explicit-any
     const Bun = (globalThis as any).Bun;
+
+    // deno-lint-ignore no-explicit-any
     const Deno = (globalThis as any).Deno;
 
     if (typeof Deno !== "undefined") {
