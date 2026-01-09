@@ -11,28 +11,11 @@
 
 ## Raptor Framework
 
-Raptor is middleware framework for developers who believe code should explain itself. Write less, express more, maintain easily.
+See more information about the Raptor framework here: <a href="https://raptorframework.com">https://raptorframework.com</a>.
 
 ### Installation
 
-To start using Raptor, simply install it through the CLI or import it directly from JSR or NPM.
-
-#### Using the Deno CLI
-
-```
-deno add jsr:@raptor/framework
-```
-
-#### Importing with JSR
-
-Raptor is also available to import directly via JSR:
-[https://jsr.io/@raptor/framework](https://jsr.io/@raptor/framework)
-
-#### Using NPM
-
-```
-npm install @raptor-http/framework
-```
+For installation instructions, please visit <a href="https://raptorframework.com/docs/installation">https://raptorframework.com/docs/installation</a>
 
 ## Documentation
 
@@ -40,5 +23,4 @@ Full documentation can be found on [https://raptorframework.com/docs](https://ra
 
 ## License
 
-_Copyright 2026, @briward. All rights reserved. The framework is licensed under
-the MIT license._
+The Raptor framework is licensed under the MIT license.
