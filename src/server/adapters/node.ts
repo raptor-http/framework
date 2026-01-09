@@ -27,6 +27,7 @@ export default class NodeServer implements ServerAdapter {
     );
   }
 
+  // deno-lint-ignore no-explicit-any
   private toWebRequest(nodeRequest: any): Request {
     const protocol = (nodeRequest.socket.encrypted) ? "https:" : "http:";
 
@@ -43,6 +44,7 @@ export default class NodeServer implements ServerAdapter {
 
   private async fromWebResponse(
     response: Response,
+    // deno-lint-ignore no-explicit-any
     nodeResponse: any,
   ): Promise<void> {
     nodeResponse.statusCode = response.status;

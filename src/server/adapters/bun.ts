@@ -14,6 +14,7 @@ export default class BunServer implements ServerAdapter {
     handler: (request: Request) => Promise<Response>,
     options?: { port?: number; hostname?: string },
   ): void {
+    // deno-lint-ignore no-explicit-any
     const Bun = (globalThis as any).Bun;
 
     if (Bun === "undefined") {

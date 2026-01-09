@@ -13,6 +13,7 @@ export default class DenoServer implements ServerAdapter {
     handler: (request: Request) => Promise<Response>,
     options?: { port?: number; hostname?: string },
   ): void {
+    // deno-lint-ignore no-explicit-any
     const Deno = (globalThis as any).Deno;
 
     if (Deno === "undefined") {

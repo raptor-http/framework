@@ -13,15 +13,15 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Publish to JSR
         run: npx jsr publish
-      
+
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
-      
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+
       - name: Publish to npm
         run: npm publish --provenance --access public
         env:
