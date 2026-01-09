@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 
-import type Context from "./context.ts";
+import type Context from "../context.ts";
 import JsonProcessor from "./processors/json.ts";
 import HtmlProcessor from "./processors/html.ts";
 import ErrorProcessor from "./processors/error.ts";

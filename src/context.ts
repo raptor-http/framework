@@ -1,4 +1,4 @@
-import type { HttpError } from "../interfaces/http-error.ts";
+import type { HttpError } from "./interfaces/http-error.ts";
 
 /**
  * The context definition.
@@ -44,10 +44,22 @@ export default class Context {
       for (const type of acceptedTypes) {
         const baseType = this.getBaseMediaType(type);
 
-        if (this.isJsonType(baseType)) return "application/json";
-        if (baseType === "text/html") return "text/html";
-        if (baseType === "text/plain") return "text/plain";
-        if (baseType.startsWith("text/")) return "text/plain";
+        if (this.isJsonType(baseType)) {
+          return "application/json";
+        }
+
+        if (baseType === "text/html") {
+          return "text/html";
+        }
+
+        if (baseType === "text/plain") {
+          return "text/plain";
+        }
+
+        if (baseType.startsWith("text/")) {
+          return "text/plain";
+        }
+
         if (baseType === "application/*" || baseType === "*/*") {
           return "text/plain";
         }
@@ -57,8 +69,13 @@ export default class Context {
     if (contentTypeHeader) {
       const baseType = this.getBaseMediaType(contentTypeHeader);
 
-      if (this.isJsonType(baseType)) return "application/json";
-      if (baseType === "text/html") return "text/html";
+      if (this.isJsonType(baseType)) {
+        return "application/json";
+      }
+
+      if (baseType === "text/html") {
+        return "text/html";
+      }
     }
 
     return "text/plain";
@@ -102,7 +119,9 @@ export default class Context {
         if (!type) return null;
 
         const qMatch = params.find((p) => p.trim().startsWith("q="));
+
         const qValue = qMatch?.split("=")[1];
+
         const q = qValue ? parseFloat(qValue) : 1.0;
 
         return {

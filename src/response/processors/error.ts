@@ -1,9 +1,8 @@
 // deno-lint-ignore-file no-explicit-any
 
-import type Context from "../context.ts";
+import type Context from "../../context.ts";
 import type { Processor } from "../../interfaces/processor.ts";
 import type { HttpError } from "../../interfaces/http-error.ts";
-import console from "node:console";
 
 /**
  * The plain text processor for HTTP responses.

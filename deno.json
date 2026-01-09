@@ -1,7 +1,10 @@
 {
   "name": "@raptor/framework",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "exports": "./mod.ts",
+  "compilerOptions": {
+    "lib": ["deno.ns", "deno.window"]
+  },
   "publish": {
     "exclude": [
       ".github",

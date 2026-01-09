@@ -1,4 +1,4 @@
-import type { Context } from "@raptor/framework";
+import type Context from "../context.ts";
 
 /**
  * Middleware function that processes a response.

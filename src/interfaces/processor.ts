@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 
-import type Context from "../http/context.ts";
+import type Context from "../context.ts";
 
 type ProcessResponse = Response | null;
 

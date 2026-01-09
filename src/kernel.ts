@@ -1,8 +1,8 @@
-import Context from "./http/context.ts";
+import Context from "./context.ts";
 import BunServer from "./server/adapters/bun.ts";
 import NodeServer from "./server/adapters/node.ts";
 import DenoServer from "./server/adapters/deno.ts";
-import ResponseManager from "./http/response-manager.ts";
+import ResponseManager from "./response/manager.ts";
 import type { HttpError } from "./interfaces/http-error.ts";
 import type { Middleware } from "./interfaces/middleware.ts";
 import type { ErrorHandler } from "./interfaces/error-handler.ts";
@@ -60,6 +60,8 @@ export default class Kernel {
    * @param options Server options.
    */
   public serve(options?: { port?: number }) {
+    const port = options?.port ?? 80;
+
     const server = this.getServerAdapter();
 
     const handler = (request: Request) => this.respond(request);
@@ -70,7 +72,11 @@ export default class Kernel {
       return;
     }
 
-    server.serve(handler, { port: options.port ?? 80 });
+    server.serve(handler, { port });
+
+    console.log(
+      `🦖 Raptor started on port ${port}...`,
+    );
   }
 
   /**

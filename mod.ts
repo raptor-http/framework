@@ -2,7 +2,7 @@
 
 import Kernel from "./src/kernel.ts";
 import Gone from "./src/error/gone.ts";
-import Context from "./src/http/context.ts";
+import Context from "./src/context.ts";
 import Conflict from "./src/error/conflict.ts";
 import NotFound from "./src/error/not-found.ts";
 import Forbidden from "./src/error/forbidden.ts";
@@ -12,7 +12,7 @@ import ServerError from "./src/error/server-error.ts";
 import Unauthorized from "./src/error/unauthorized.ts";
 import NotAcceptable from "./src/error/not-acceptable.ts";
 import RequestTimeout from "./src/error/request-timeout.ts";
-import ResponseManager from "./src/http/response-manager.ts";
+import ResponseManager from "./src/response/manager.ts";
 import TooManyRequests from "./src/error/too-many-requests.ts";
 import MethodNotAllowed from "./src/error/method-not-allowed.ts";
 import UnprocessableEntity from "./src/error/unprocessable-entity.ts";

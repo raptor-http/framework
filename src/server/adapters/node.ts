@@ -1,5 +1,24 @@
 import type { ServerAdapter } from "../../interfaces/server-adapter.ts";
 
+interface NodeIncomingMessage {
+  method?: string;
+  url?: string;
+  headers: Record<string, string | string[] | undefined>;
+  socket: {
+    encrypted?: boolean;
+  };
+}
+
+interface NodeServerResponse {
+  statusCode: number;
+  setHeader(name: string, value: string | string[]): void;
+  write(chunk: Uint8Array): void;
+  end(): void;
+}
+
+/**
+ * The Node server implementation for Raptor.
+ */
 export default class NodeServer implements ServerAdapter {
   /**
    * Start the server with the given request handler.
@@ -14,11 +33,11 @@ export default class NodeServer implements ServerAdapter {
     const { createServer } = await import("node:http");
 
     const server = createServer(async (nodeRequest, nodeResponse) => {
-      const request = this.toWebRequest(nodeRequest);
+      const request = this.toWebRequest(nodeRequest as NodeIncomingMessage);
 
       const response = await handler(request);
 
-      await this.fromWebResponse(response, nodeResponse);
+      await this.fromWebResponse(response, nodeResponse as NodeServerResponse);
     });
 
     server.listen(
@@ -27,25 +46,35 @@ export default class NodeServer implements ServerAdapter {
     );
   }
 
-  // deno-lint-ignore no-explicit-any
-  private toWebRequest(nodeRequest: any): Request {
-    const protocol = (nodeRequest.socket.encrypted) ? "https:" : "http:";
+  /**
+   * Convert to web request.
+   *
+   * @param nodeRequest The request from node server.
+   * @returns A request object.
+   */
+  private toWebRequest(nodeRequest: NodeIncomingMessage): Request {
+    const protocol = nodeRequest.socket.encrypted ? "https:" : "http:";
 
     const url = `${protocol}//${nodeRequest.headers.host}${nodeRequest.url}`;
 
     return new Request(url, {
       method: nodeRequest.method,
-      headers: nodeRequest.headers,
+      headers: nodeRequest.headers as HeadersInit,
       body: nodeRequest.method !== "GET" && nodeRequest.method !== "HEAD"
-        ? nodeRequest
+        ? (nodeRequest as unknown as ReadableStream<Uint8Array>)
         : undefined,
     });
   }
 
+  /**
+   * Convert from web response.
+   *
+   * @param response The web response object.
+   * @param nodeResponse The node response object.
+   */
   private async fromWebResponse(
     response: Response,
-    // deno-lint-ignore no-explicit-any
-    nodeResponse: any,
+    nodeResponse: NodeServerResponse,
   ): Promise<void> {
     nodeResponse.statusCode = response.status;
 
