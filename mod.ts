@@ -19,6 +19,7 @@ import UnprocessableEntity from "./src/error/unprocessable-entity.ts";
 
 // Export all available interfaces/types.
 export type { Processor } from "./src/interfaces/processor.ts";
+export type { Middleware } from "./src/interfaces/middleware.ts";
 export type { HttpError as Error } from "./src/interfaces/http-error.ts";
 
 export {
