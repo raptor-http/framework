@@ -2,13 +2,17 @@
 
 ## Introduction
 
-Thanks for your interest in Raptor! Contributions of all kinds are welcome - whether you're reporting bugs, suggesting features, improving documentation, or sharing the project with others.
+Thanks for your interest in Raptor! Contributions of all kinds are welcome -
+whether you're reporting bugs, suggesting features, improving documentation, or
+sharing the project with others.
 
 ## Ways to Contribute
 
 ### Report Issues
 
-Found a bug or have a suggestion? [Create an issue](https://github.com/raptor-http/framework/issues/new/choose) using one of our templates:
+Found a bug or have a suggestion?
+[Create an issue](https://github.com/raptor-http/framework/issues/new/choose)
+using one of our templates:
 
 - **Bug Report** - Something's not working as expected
 - **Feature Request** - Ideas for new features or improvements
@@ -47,7 +51,8 @@ deno task test-watch
 - **Write tests** - New features should include tests
 - **Follow the style** - Run `deno fmt` before committing
 - **Update docs** - If you change APIs, provide documentation
-- **Cross-runtime** - Ensure changes work across Deno, Node.js, and Bun when applicable
+- **Cross-runtime** - Ensure changes work across Deno, Node.js, and Bun when
+  applicable
 
 #### Code Philosophy
 
@@ -77,7 +82,8 @@ Keep commit messages clear and descriptive:
 
 ### Star the Project
 
-The simplest way to show support! A star on [GitHub](https://github.com/raptor-http/framework) helps others discover Raptor.
+The simplest way to show support! A star on
+[GitHub](https://github.com/raptor-http/framework) helps others discover Raptor.
 
 ### Use the Project
 
@@ -109,7 +115,8 @@ bunx jsr add @raptor/framework
 
 ### Prerequisites
 
-Raptor supports Deno, Bun & Node runtimes. However, the framework has been written with Deno in mind so we recommend using Deno when contributing.
+Raptor supports Deno, Bun & Node runtimes. However, the framework has been
+written with Deno in mind so we recommend using Deno when contributing.
 
 - [Deno](https://deno.com) 2.6.4 or higher
 - [Bun](https://bun.com) 1.3.5 or higher
@@ -160,4 +167,5 @@ deno check mod.ts
 
 - Check out the [documentation](https://raptorframework.com)
 - Browse [existing issues](https://github.com/raptor-http/framework/issues)
-- Create a [new discussion](https://github.com/raptor-http/framework/issues/new?template=question.yml)
+- Create a
+  [new discussion](https://github.com/raptor-http/framework/issues/new?template=question.yml)

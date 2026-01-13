@@ -13,6 +13,6 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Publish to JSR
         run: npx jsr publish
