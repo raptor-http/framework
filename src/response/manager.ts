@@ -45,6 +45,7 @@ export default class ResponseManager {
       0,
       Math.min(weight, this.processors.length),
     );
+
     this.processors.splice(validatedWeight, 0, processor);
   }
 
@@ -59,12 +60,10 @@ export default class ResponseManager {
     body: any,
     context: Context,
   ): Promise<Response> {
-    for (let i = 0; i < this.processors.length; i++) {
-      const processor = this.processors[i];
+    const processorsLength = this.processors.length;
 
-      if (!processor) continue;
-
-      const response = await processor.process(body, context);
+    for (let i = 0; i < processorsLength; i++) {
+      const response = await this.processors[i].process(body, context);
 
       if (response instanceof Response) {
         return response;

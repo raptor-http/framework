@@ -16,11 +16,7 @@ export default class ResponseProcessor implements Processor {
    */
   public process(response: any, _context: Context): Response | null {
     if (response instanceof Response) {
-      return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers: response.headers,
-      });
+      return response;
     }
 
     return null;

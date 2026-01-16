@@ -91,11 +91,12 @@ export default class Kernel {
   /**
    * Handle an HTTP request and respond.
    *
-   * @param request
+   * @param request The request object.
+   *
    * @returns A promise resolving the HTTP response.
    */
   public async respond(request: Request): Promise<Response> {
-    const context = new Context(request.clone(), new Response());
+    const context = new Context(request, new Response());
 
     await this.next(context);
 
@@ -106,6 +107,7 @@ export default class Kernel {
    * Set or override the response manager for the kernel.
    *
    * @param manager A valid response manager object.
+   *
    * @returns void
    */
   public setResponseManager(manager: ResponseManager): void {
@@ -116,6 +118,7 @@ export default class Kernel {
    * Add custom error handling middleware.
    *
    * @param handler An error handler function to handle errors.
+   *
    * @returns void
    */
   public catch(handler: ErrorHandler): void {
@@ -126,6 +129,7 @@ export default class Kernel {
    * Handle the processing of middleware.
    *
    * @param context The current HTTP context.
+   *
    * @returns void
    */
   private async next(context: Context): Promise<void> {
@@ -137,6 +141,7 @@ export default class Kernel {
    *
    * @param context The current HTTP context.
    * @param index The current middleware index.
+   *
    * @returns Promise<void>
    */
   private async executeMiddleware(
@@ -179,6 +184,8 @@ export default class Kernel {
    *
    * @param body An unknown response body to process.
    * @param context The current HTTP context.
+   *
+   * @returns Promise<void>
    */
   private async processMiddlewareResponse(
     body: unknown,
@@ -194,6 +201,7 @@ export default class Kernel {
    *
    * @param error The uncaught error object to process.
    * @param context The current HTTP context object.
+   *
    * @returns Promise<void>
    */
   private async processUncaughtError(
@@ -217,6 +225,7 @@ export default class Kernel {
    *
    * @param error The uncaught error object to handle.
    * @param context The current HTTP context object.
+   *
    * @returns Promise<void>
    */
   private internalErrorHandler(context: Context): Promise<void> {

@@ -57,7 +57,7 @@ body:
         import { Kernel } from "@raptor/framework";
 
         const app = new Kernel();
-        
+
         // Your reproduction code here
       render: typescript
     validations:

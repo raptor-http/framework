@@ -16,7 +16,7 @@ export default class JsonProcessor implements Processor {
    */
   public process(body: any, context: Context) {
     // Check if the response already has a content type set.
-    const hasContentType = context.response.headers.get("content-type");
+    const hasContentType = context.hasContentType();
 
     // If the middleware doesn't return an object, don't process.
     if (typeof body !== "object") return null;
