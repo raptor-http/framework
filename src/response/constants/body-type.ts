@@ -8,4 +8,5 @@ export const ResponseBodyType = {
   OBJECT: "object",
 } as const;
 
-export type ResponseBodyType = typeof ResponseBodyType[keyof typeof ResponseBodyType];
+export type ResponseBodyType =
+  typeof ResponseBodyType[keyof typeof ResponseBodyType];

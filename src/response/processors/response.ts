@@ -9,10 +9,10 @@ import type { Processor } from "../../interfaces/processor.ts";
  */
 export default class ResponseProcessor implements Processor {
   /**
-     * The response body type the processor handles.
-     *
-     * @returns The body type.
-     */
+   * The response body type the processor handles.
+   *
+   * @returns The body type.
+   */
   type(): ResponseBodyType {
     return ResponseBodyType.RESPONSE;
   }

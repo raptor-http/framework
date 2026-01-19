@@ -17,7 +17,7 @@ export default class ErrorProcessor implements Processor {
   type(): ResponseBodyType {
     return ResponseBodyType.ERROR;
   }
-  
+
   /**
    * Handle the response and process plain text if found.
    *

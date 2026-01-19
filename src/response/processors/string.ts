@@ -10,10 +10,10 @@ import { ResponseBodyType } from "../constants/body-type.ts";
  */
 export default class StringProcessor implements Processor {
   /**
-     * The response body type the processor handles.
-     *
-     * @returns The body type.
-     */
+   * The response body type the processor handles.
+   *
+   * @returns The body type.
+   */
   type(): ResponseBodyType {
     return ResponseBodyType.STRING;
   }

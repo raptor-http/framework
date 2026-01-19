@@ -10,10 +10,10 @@ import type { Processor } from "../../interfaces/processor.ts";
  */
 export default class ObjectProcessor implements Processor {
   /**
-     * The response body type the processor handles.
-     *
-     * @returns The body type.
-     */
+   * The response body type the processor handles.
+   *
+   * @returns The body type.
+   */
   type(): ResponseBodyType {
     return ResponseBodyType.OBJECT;
   }
@@ -41,7 +41,9 @@ export default class ObjectProcessor implements Processor {
         headers: context.response.headers,
       });
     } catch (_error) {
-      throw new ServerError("There was a problem stringifying the JSON object.");
+      throw new ServerError(
+        "There was a problem stringifying the JSON object.",
+      );
     }
   }
 }

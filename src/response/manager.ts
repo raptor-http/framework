@@ -55,7 +55,9 @@ export default class ResponseManager {
     const processor = this.processors.get(typeKey);
 
     if (!processor) {
-      throw new ServerError(`No processor was found for this type key: ${typeKey}.`);
+      throw new ServerError(
+        `No processor was found for this type key: ${typeKey}.`,
+      );
     }
 
     return processor.process(body, context);

@@ -12,7 +12,7 @@ export interface Processor {
    *
    * @returns The body type.
    */
-  type() : ResponseBodyType;
+  type(): ResponseBodyType;
 
   /**
    * Handle the response body and process.
