@@ -3,19 +3,29 @@
 import type Context from "../../context.ts";
 import type { Processor } from "../../interfaces/processor.ts";
 import type { HttpError } from "../../interfaces/http-error.ts";
+import { ResponseBodyType } from "../constants/body-type.ts";
 
 /**
  * The plain text processor for HTTP responses.
  */
 export default class ErrorProcessor implements Processor {
   /**
+   * The response body type the processor handles.
+   *
+   * @returns The body type.
+   */
+  type(): ResponseBodyType {
+    return ResponseBodyType.ERROR;
+  }
+  
+  /**
    * Handle the response and process plain text if found.
    *
    * @param body Any HTTP response body.
    * @param context The current HTTP context.
-   * @returns An HTTP response or null.
+   * @returns An HTTP response.
    */
-  public process(body: any, context: Context): Response | null {
+  public process(body: any, context: Context): Response {
     return this.transformResponse(body, context);
   }
 

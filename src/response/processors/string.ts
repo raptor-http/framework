@@ -3,19 +3,29 @@
 import type Context from "../../context.ts";
 import { HTML_REGEX } from "../../helpers/html-regex.ts";
 import type { Processor } from "../../interfaces/processor.ts";
+import { ResponseBodyType } from "../constants/body-type.ts";
 
 /**
  * The HTML processor for HTTP responses.
  */
 export default class StringProcessor implements Processor {
   /**
+     * The response body type the processor handles.
+     *
+     * @returns The body type.
+     */
+  type(): ResponseBodyType {
+    return ResponseBodyType.STRING;
+  }
+
+  /**
    * Handle the response and process HTML if found.
    *
    * @param body Any HTTP response body.
    * @param context The current HTTP context.
-   * @returns An HTTP response or null.
+   * @returns An HTTP response.
    */
-  public process(body: any, context: Context) {
+  public process(body: any, context: Context): Response {
     // Check if the response already has a content type set.
     const hasContentType = context.hasContentType();
 

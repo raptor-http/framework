@@ -10,6 +10,7 @@ import BadRequest from "../src/error/bad-request.ts";
 import ServerError from "../src/error/server-error.ts";
 import ResponseManager from "../src/response/manager.ts";
 import type { Processor } from "../src/interfaces/processor.ts";
+import { ResponseBodyType } from "../src/response/constants/body-type.ts";
 
 const APP_URL = "http://localhost:8000";
 
@@ -187,14 +188,18 @@ Deno.test("test new processor is added to kernel", async () => {
   const app = new Kernel();
 
   class MyStringProcessor implements Processor {
-    process(body: any): Promise<Response | null> | (Response | null) {
+    type() {
+      return ResponseBodyType.STRING;
+    }
+
+    process(body: any): Response {
       return new Response(`MyStringProcessor: ${body}`);
     }
   }
 
   const manager = new ResponseManager();
 
-  manager.addProcessor("string", new MyStringProcessor(), -1);
+  manager.addProcessor(new MyStringProcessor());
 
   app.setResponseManager(manager);
 

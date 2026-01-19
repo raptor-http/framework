@@ -1,6 +1,8 @@
 // deno-lint-ignore-file no-explicit-any
 
 import type Context from "../../context.ts";
+import ServerError from "../../error/server-error.ts";
+import { ResponseBodyType } from "../constants/body-type.ts";
 import type { Processor } from "../../interfaces/processor.ts";
 
 /**
@@ -8,13 +10,22 @@ import type { Processor } from "../../interfaces/processor.ts";
  */
 export default class ObjectProcessor implements Processor {
   /**
+     * The response body type the processor handles.
+     *
+     * @returns The body type.
+     */
+  type(): ResponseBodyType {
+    return ResponseBodyType.OBJECT;
+  }
+
+  /**
    * Handle the response and process objects if found.
    *
    * @param body Any HTTP response body.
    * @param context The current HTTP context.
-   * @returns An HTTP response or null.
+   * @returns An HTTP response.
    */
-  public process(body: any, context: Context) {
+  public process(body: any, context: Context): Response {
     // Check if the response already has a content type set.
     const hasContentType = context.hasContentType();
 
@@ -30,7 +41,7 @@ export default class ObjectProcessor implements Processor {
         headers: context.response.headers,
       });
     } catch (_error) {
-      return null;
+      throw new ServerError("There was a problem stringifying the JSON object.");
     }
   }
 }
