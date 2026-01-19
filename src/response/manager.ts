@@ -4,6 +4,7 @@ import type Context from "../context.ts";
 import JsonProcessor from "./processors/json.ts";
 import HtmlProcessor from "./processors/html.ts";
 import ErrorProcessor from "./processors/error.ts";
+import { HTML_REGEX } from "../helpers/html-regex.ts";
 import ResponseProcessor from "./processors/response.ts";
 import type { Processor } from "../interfaces/processor.ts";
 import PlainTextProcessor from "./processors/plain-text.ts";
@@ -16,7 +17,7 @@ export default class ResponseManager {
   /**
    * All available response processors.
    */
-  private processors: Processor[] = [];
+  private processors: Map<string, Processor> = new Map();
 
   /**
    * Initialise the HTTP processor.
@@ -24,29 +25,22 @@ export default class ResponseManager {
    * @constructor
    */
   constructor() {
-    this.processors = [
-      new ResponseProcessor(),
-      new ErrorProcessor(),
-      new PlainTextProcessor(),
-      new HtmlProcessor(),
-      new JsonProcessor(),
-    ];
+    this.processors.set("response", new ResponseProcessor());
+    this.processors.set("error", new ErrorProcessor());
+    this.processors.set("string:plain", new PlainTextProcessor());
+    this.processors.set("string:html", new HtmlProcessor());
+    this.processors.set("object", new JsonProcessor());
   }
 
   /**
    * Add a new processor to the response manager.
    *
-   * @param processor An implementation of a response processor.
-   * @param weight An optional weight to order the processor in the stack.
+   * @param key A unique key for your processor.
+   * @param processor An implementation of the processor interface.
    * @returns void
    */
-  public addProcessor(processor: Processor, weight: number = 0): void {
-    const validatedWeight = Math.max(
-      0,
-      Math.min(weight, this.processors.length),
-    );
-
-    this.processors.splice(validatedWeight, 0, processor);
+  public addProcessor(key: string, processor: Processor): void {
+    this.processors.set(key, processor);
   }
 
   /**
@@ -60,16 +54,41 @@ export default class ResponseManager {
     body: any,
     context: Context,
   ): Promise<Response> {
-    const processorsLength = this.processors.length;
+    const typeKey = this.getTypeKey(body);
 
-    for (let i = 0; i < processorsLength; i++) {
-      const response = await this.processors[i].process(body, context);
+    const response = await this.processors.get(typeKey)!.process(body, context);
 
-      if (response instanceof Response) {
-        return response;
-      }
+    if (response instanceof Response) {
+      return response;
     }
 
     throw new Error("No response body was found.");
+  }
+
+  /**
+   * Determine the type key for a given body.
+   *
+   * @param body The response body to classify.
+   *
+   * @returns A string key identifying the body type.
+   */
+  private getTypeKey(body: any): string {
+    if (body instanceof Response) {
+      return "Response";
+    }
+
+    if (body instanceof Error) {
+      return "Error";
+    }
+
+    if (typeof body === "string") {
+      return HTML_REGEX.test(body) ? "string:html" : "string:plain";
+    }
+
+    if (typeof body === "object" && body !== null) {
+      return "object";
+    }
+
+    return "unknown";
   }
 }

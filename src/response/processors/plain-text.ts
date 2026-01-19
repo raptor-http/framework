@@ -1,7 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 
 import type Context from "../../context.ts";
-import { HTML_REGEX } from "../../helpers/html-regex.ts";
 import type { Processor } from "../../interfaces/processor.ts";
 
 /**
@@ -19,15 +18,7 @@ export default class PlainTextProcessor implements Processor {
     // Check if the response already has a content type set.
     const hasContentType = context.hasContentType();
 
-    // If the middleware doesn't return a string, don't process.
-    if (typeof body !== "string") return null;
-
-    // Check if the string contains HTML, ignore if it does.
-    const isHtml = HTML_REGEX.test(body);
-
-    if (isHtml) return null;
-
-    if (!isHtml && !hasContentType) {
+    if (!hasContentType) {
       context.response.headers.set("content-type", "text/plain");
     }
 
