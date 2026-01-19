@@ -15,10 +15,6 @@ export default class ResponseProcessor implements Processor {
    * @returns An HTTP response or null.
    */
   public process(response: any, _context: Context): Response | null {
-    if (response instanceof Response) {
-      return response;
-    }
-
-    return null;
+    return response;
   }
 }

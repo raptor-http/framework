@@ -16,10 +16,6 @@ export default class ErrorProcessor implements Processor {
    * @returns An HTTP response or null.
    */
   public process(body: any, context: Context): Response | null {
-    if (!(body instanceof Error)) return null;
-
-    console.log(body);
-
     return this.transformResponse(body, context);
   }
 

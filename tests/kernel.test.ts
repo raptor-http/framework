@@ -194,7 +194,7 @@ Deno.test("test new processor is added to kernel", async () => {
 
   const manager = new ResponseManager();
 
-  manager.addProcessor(new MyStringProcessor());
+  manager.addProcessor("string", new MyStringProcessor(), -1);
 
   app.setResponseManager(manager);
 
