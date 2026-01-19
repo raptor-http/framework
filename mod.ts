@@ -16,6 +16,7 @@ import ResponseManager from "./src/response/manager.ts";
 import TooManyRequests from "./src/error/too-many-requests.ts";
 import MethodNotAllowed from "./src/error/method-not-allowed.ts";
 import UnprocessableEntity from "./src/error/unprocessable-entity.ts";
+import { ResponseBodyType } from "./src/response/constants/body-type.ts";
 
 // Export all available interfaces/types.
 export type { Processor } from "./src/interfaces/processor.ts";
@@ -34,6 +35,7 @@ export {
   NotAcceptable,
   NotFound,
   RequestTimeout,
+  ResponseBodyType,
   ResponseManager,
   ServerError,
   TooManyRequests,
