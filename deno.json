@@ -1,6 +1,6 @@
 {
   "name": "@raptor/framework",
-  "version": "0.15.1",
+  "version": "0.15.2",
   "exports": "./mod.ts",
   "compilerOptions": {
     "lib": ["deno.ns", "deno.window"]
