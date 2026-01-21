@@ -19,7 +19,7 @@ import MethodNotAllowed from "./src/error/method-not-allowed.ts";
 import UnprocessableEntity from "./src/error/unprocessable-entity.ts";
 
 // In-built response classes.
-import ResponseManager from "./src/response/manager.ts";
+import DefaultResponseManager from "./src/response/manager.ts";
 import { ResponseBodyType } from "./src/response/constants/body-type.ts";
 
 // Export all available interfaces/types.
@@ -33,6 +33,7 @@ export {
   BadRequest,
   Conflict,
   Context,
+  DefaultResponseManager,
   Forbidden,
   Gone,
   ImATeapot,
@@ -42,7 +43,6 @@ export {
   NotFound,
   RequestTimeout,
   ResponseBodyType,
-  ResponseManager,
   ServerError,
   TooManyRequests,
   Unauthorized,

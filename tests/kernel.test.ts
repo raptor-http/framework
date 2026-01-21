@@ -8,7 +8,7 @@ import type Context from "../src/context.ts";
 import NotFound from "../src/error/not-found.ts";
 import BadRequest from "../src/error/bad-request.ts";
 import ServerError from "../src/error/server-error.ts";
-import ResponseManager from "../src/response/manager.ts";
+import DefaultResponseManager from "../src/response/manager.ts";
 import { ResponseBodyType } from "../src/response/constants/body-type.ts";
 import type { ResponseManager } from "../src/interfaces/response-manager.ts";
 import type { ResponseProcessor } from "../src/interfaces/response-processor.ts";
@@ -198,7 +198,7 @@ Deno.test("test custom processor can override internal processor", async () => {
     }
   }
 
-  const manager = new ResponseManager();
+  const manager = new DefaultResponseManager();
 
   manager.addProcessor(new MyStringProcessor());
 
