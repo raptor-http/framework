@@ -1,14 +1,14 @@
 // deno-lint-ignore-file no-explicit-any
 
 import type Context from "../../context.ts";
-import type { Processor } from "../../interfaces/processor.ts";
-import type { HttpError } from "../../interfaces/http-error.ts";
 import { ResponseBodyType } from "../constants/body-type.ts";
+import type { HttpError } from "../../interfaces/http-error.ts";
+import type { ResponseProcessor } from "../../interfaces/response-processor.ts";
 
 /**
  * The plain text processor for HTTP responses.
  */
-export default class ErrorProcessor implements Processor {
+export default class ErrorProcessor implements ResponseProcessor {
   /**
    * The response body type the processor handles.
    *

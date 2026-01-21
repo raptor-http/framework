@@ -2,11 +2,12 @@ import Context from "./context.ts";
 import BunServer from "./server/adapters/bun.ts";
 import NodeServer from "./server/adapters/node.ts";
 import DenoServer from "./server/adapters/deno.ts";
-import ResponseManager from "./response/manager.ts";
+import InternalResponseManager from "./response/manager.ts";
 import type { HttpError } from "./interfaces/http-error.ts";
 import type { Middleware } from "./interfaces/middleware.ts";
 import type { ErrorHandler } from "./interfaces/error-handler.ts";
 import type { ServerAdapter } from "./interfaces/server-adapter.ts";
+import type { ResponseManager } from "./interfaces/response-manager.ts";
 
 /**
  * The root initialiser for the framework.
@@ -33,7 +34,7 @@ export default class Kernel {
    * @constructor
    */
   constructor() {
-    this.responseManager = new ResponseManager();
+    this.responseManager = new InternalResponseManager();
   }
 
   /**

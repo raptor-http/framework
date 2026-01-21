@@ -9,7 +9,7 @@ import NotFound from "../src/error/not-found.ts";
 import BadRequest from "../src/error/bad-request.ts";
 import ServerError from "../src/error/server-error.ts";
 import ResponseManager from "../src/response/manager.ts";
-import type { Processor } from "../src/interfaces/processor.ts";
+import type { ResponseProcessor } from "../src/interfaces/response-processor.ts";
 import { ResponseBodyType } from "../src/response/constants/body-type.ts";
 
 const APP_URL = "http://localhost:8000";
@@ -187,7 +187,7 @@ Deno.test("test kernel does not automatically catch error", async () => {
 Deno.test("test new processor is added to kernel", async () => {
   const app = new Kernel();
 
-  class MyStringProcessor implements Processor {
+  class MyStringProcessor implements ResponseProcessor {
     type() {
       return ResponseBodyType.STRING;
     }

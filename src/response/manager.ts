@@ -5,19 +5,20 @@ import ServerError from "../error/server-error.ts";
 import ErrorProcessor from "./processors/error.ts";
 import StringProcessor from "./processors/string.ts";
 import ObjectProcessor from "./processors/object.ts";
-import ResponseProcessor from "./processors/response.ts";
-import type { Processor } from "../interfaces/processor.ts";
 import { ResponseBodyType } from "./constants/body-type.ts";
+import ResponseObjectProcessor from "./processors/response.ts";
+import type { ResponseManager } from "../interfaces/response-manager.ts";
+import type { ResponseProcessor } from "../interfaces/response-processor.ts";
 
 /**
  * The response manager takes the response body and processes it
  * into a valid HTTP response.
  */
-export default class ResponseManager {
+export default class Manager implements ResponseManager {
   /**
    * All available response processors.
    */
-  private processors: Map<string, Processor> = new Map();
+  private processors: Map<string, ResponseProcessor> = new Map();
 
   /**
    * Initialise the HTTP processor.
@@ -25,7 +26,7 @@ export default class ResponseManager {
    * @constructor
    */
   constructor() {
-    this.addProcessor(new ResponseProcessor());
+    this.addProcessor(new ResponseObjectProcessor());
     this.addProcessor(new ErrorProcessor());
     this.addProcessor(new StringProcessor());
     this.addProcessor(new ObjectProcessor());
@@ -38,7 +39,7 @@ export default class ResponseManager {
    *
    * @returns void
    */
-  public addProcessor(processor: Processor): void {
+  public addProcessor(processor: ResponseProcessor): void {
     this.processors.set(processor.type(), processor);
   }
 

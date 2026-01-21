@@ -19,9 +19,9 @@ import UnprocessableEntity from "./src/error/unprocessable-entity.ts";
 import { ResponseBodyType } from "./src/response/constants/body-type.ts";
 
 // Export all available interfaces/types.
-export type { Processor } from "./src/interfaces/processor.ts";
 export type { Middleware } from "./src/interfaces/middleware.ts";
 export type { HttpError as Error } from "./src/interfaces/http-error.ts";
+export type { ResponseProcessor } from "./src/interfaces/response-processor.ts";
 
 export {
   BadRequest,
