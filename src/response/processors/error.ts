@@ -2,13 +2,13 @@
 
 import type Context from "../../context.ts";
 import { ResponseBodyType } from "../constants/body-type.ts";
-import type { HttpError } from "../../interfaces/http-error.ts";
-import type { ResponseProcessor } from "../../interfaces/response-processor.ts";
+import type { IHttpError } from "../../interfaces/http-error.ts";
+import type { IResponseProcessor } from "../../interfaces/response-processor.ts";
 
 /**
  * The plain text processor for HTTP responses.
  */
-export default class ErrorProcessor implements ResponseProcessor {
+export default class ErrorProcessor implements IResponseProcessor {
   /**
    * The response body type the processor handles.
    *
@@ -35,7 +35,7 @@ export default class ErrorProcessor implements ResponseProcessor {
    * @param error The error to check against.
    * @returns A boolean indicating whether it's an HTTP error.
    */
-  private isHttpError(error: Error): error is HttpError {
+  private isHttpError(error: Error): error is IHttpError {
     return (
       "status" in error &&
       typeof (error as any).status === "number"

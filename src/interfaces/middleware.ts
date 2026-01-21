@@ -3,7 +3,7 @@ import type Context from "../context.ts";
 /**
  * Middleware function that processes a response.
  */
-export type Middleware = (
+export type IMiddleware = (
   context: Context,
   next: CallableFunction,
 ) => unknown;

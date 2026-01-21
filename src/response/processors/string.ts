@@ -3,12 +3,12 @@
 import type Context from "../../context.ts";
 import { HTML_REGEX } from "../../helpers/html-regex.ts";
 import { ResponseBodyType } from "../constants/body-type.ts";
-import type { ResponseProcessor } from "../../interfaces/response-processor.ts";
+import type { IResponseProcessor } from "../../interfaces/response-processor.ts";
 
 /**
  * The HTML processor for HTTP responses.
  */
-export default class StringProcessor implements ResponseProcessor {
+export default class StringProcessor implements IResponseProcessor {
   /**
    * The response body type the processor handles.
    *

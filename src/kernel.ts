@@ -2,12 +2,13 @@ import Context from "./context.ts";
 import BunServer from "./server/adapters/bun.ts";
 import NodeServer from "./server/adapters/node.ts";
 import DenoServer from "./server/adapters/deno.ts";
-import InternalResponseManager from "./response/manager.ts";
-import type { HttpError } from "./interfaces/http-error.ts";
-import type { Middleware } from "./interfaces/middleware.ts";
-import type { ErrorHandler } from "./interfaces/error-handler.ts";
-import type { ServerAdapter } from "./interfaces/server-adapter.ts";
-import type { ResponseManager } from "./interfaces/response-manager.ts";
+import ResponseManager from "./response/manager.ts";
+
+import type { IHttpError } from "./interfaces/http-error.ts";
+import type { IMiddleware } from "./interfaces/middleware.ts";
+import type { IErrorHandler } from "./interfaces/error-handler.ts";
+import type { IServerAdapter } from "./interfaces/server-adapter.ts";
+import type { IResponseManager } from "./interfaces/response-manager.ts";
 
 /**
  * The root initialiser for the framework.
@@ -16,17 +17,17 @@ export default class Kernel {
   /**
    * The response manager for the kernel.
    */
-  private responseManager: ResponseManager;
+  private responseManager: IResponseManager;
 
   /**
    * The available middleware.
    */
-  private middleware: Middleware[] = [];
+  private middleware: IMiddleware[] = [];
 
   /**
    * An optional custom error handler function.
    */
-  private customErrorHandler?: ErrorHandler;
+  private customErrorHandler?: IErrorHandler;
 
   /**
    * Initialise the kernel.
@@ -34,7 +35,7 @@ export default class Kernel {
    * @constructor
    */
   constructor() {
-    this.responseManager = new InternalResponseManager();
+    this.responseManager = new ResponseManager();
   }
 
   /**
@@ -42,7 +43,7 @@ export default class Kernel {
    *
    * @param middleware An HTTP middleware instance.
    */
-  public add(middleware: Middleware) {
+  public add(middleware: IMiddleware) {
     this.middleware.push(middleware);
   }
 
@@ -51,7 +52,7 @@ export default class Kernel {
    *
    * @param middleware An HTTP middleware instance.
    */
-  public use(middleware: Middleware) {
+  public use(middleware: IMiddleware) {
     this.add(middleware);
   }
 
@@ -111,7 +112,7 @@ export default class Kernel {
    *
    * @returns void
    */
-  public setResponseManager(manager: ResponseManager): void {
+  public setResponseManager(manager: IResponseManager): void {
     this.responseManager = manager;
   }
 
@@ -122,7 +123,7 @@ export default class Kernel {
    *
    * @returns void
    */
-  public catch(handler: ErrorHandler): void {
+  public catch(handler: IErrorHandler): void {
     this.customErrorHandler = handler;
   }
 
@@ -174,7 +175,7 @@ export default class Kernel {
 
       await this.processMiddlewareResponse(body, context);
     } catch (error) {
-      context.error = error as Error | HttpError;
+      context.error = error as Error | IHttpError;
 
       await this.processUncaughtError(context);
     }
@@ -238,7 +239,7 @@ export default class Kernel {
    *
    * @returns A server adapter implementation.
    */
-  private getServerAdapter(): ServerAdapter {
+  private getServerAdapter(): IServerAdapter {
     // deno-lint-ignore no-explicit-any
     const Bun = (globalThis as any).Bun;
 

@@ -1,7 +1,7 @@
 /**
  * The base error definition.
  */
-export interface HttpError<T = unknown> extends Error {
+export interface IHttpError<T = unknown> extends Error {
   /**
    * The name of the error.
    */

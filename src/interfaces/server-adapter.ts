@@ -1,4 +1,4 @@
-export interface ServerAdapter {
+export interface IServerAdapter {
   /**
    * Start the server with the given request handler.
    *

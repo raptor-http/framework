@@ -1,11 +1,11 @@
 import ServerError from "../../error/server-error.ts";
 
-import type { ServerAdapter } from "../../interfaces/server-adapter.ts";
+import type { IServerAdapter } from "../../interfaces/server-adapter.ts";
 
 /**
  * The Deno server implementation for Raptor.
  */
-export default class DenoServer implements ServerAdapter {
+export default class DenoServer implements IServerAdapter {
   /**
    * Start the server with the given request handler.
    *
