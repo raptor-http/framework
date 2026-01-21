@@ -8,9 +8,10 @@ import type Context from "../src/context.ts";
 import NotFound from "../src/error/not-found.ts";
 import BadRequest from "../src/error/bad-request.ts";
 import ServerError from "../src/error/server-error.ts";
-import ResponseManager from "../src/response/manager.ts";
-import type { ResponseProcessor } from "../src/interfaces/response-processor.ts";
+import InternalResponseManager from "../src/response/manager.ts";
 import { ResponseBodyType } from "../src/response/constants/body-type.ts";
+import type { ResponseManager } from "../src/interfaces/response-manager.ts";
+import type { ResponseProcessor } from "../src/interfaces/response-processor.ts";
 
 const APP_URL = "http://localhost:8000";
 
@@ -184,7 +185,7 @@ Deno.test("test kernel does not automatically catch error", async () => {
   assertEquals(data.message, "Nothing was found");
 });
 
-Deno.test("test new processor is added to kernel", async () => {
+Deno.test("test custom processor can override internal processor", async () => {
   const app = new Kernel();
 
   class MyStringProcessor implements ResponseProcessor {
@@ -197,7 +198,75 @@ Deno.test("test new processor is added to kernel", async () => {
     }
   }
 
-  const manager = new ResponseManager();
+  const manager = new InternalResponseManager();
+
+  manager.addProcessor(new MyStringProcessor());
+
+  app.setResponseManager(manager);
+
+  app.add(() => "Test");
+
+  const response = await app.respond(new Request(APP_URL));
+
+  assertEquals(await response.text(), "MyStringProcessor: Test");
+});
+
+Deno.test("test custom response manager can override internal manager", async () => {
+  const app = new Kernel();
+
+  class CustomResponseManager implements ResponseManager {
+    private processors: Map<string, ResponseProcessor> = new Map();
+
+    public addProcessor(processor: ResponseProcessor): void {
+      this.processors.set(processor.type(), processor);
+    }
+
+    public process(body: any, context: Context): Response | Promise<Response> {
+      const typeKey = this.getTypeKey(body);
+
+      const processor = this.processors.get(typeKey);
+
+      if (!processor) {
+        throw new ServerError(
+          `No processor was found for this type key: ${typeKey}.`,
+        );
+      }
+
+      return processor.process(body, context);
+    }
+
+    private getTypeKey(body: any): string {
+      if (body instanceof Response) {
+        return ResponseBodyType.RESPONSE;
+      }
+
+      if (body instanceof Error) {
+        return ResponseBodyType.ERROR;
+      }
+
+      if (typeof body === "string") {
+        return ResponseBodyType.STRING;
+      }
+
+      if (typeof body === "object" && body !== null) {
+        return ResponseBodyType.OBJECT;
+      }
+
+      return "unknown";
+    }
+  }
+
+  class MyStringProcessor implements ResponseProcessor {
+    type() {
+      return ResponseBodyType.STRING;
+    }
+
+    process(body: any): Response {
+      return new Response(`MyStringProcessor: ${body}`);
+    }
+  }
+
+  const manager = new CustomResponseManager();
 
   manager.addProcessor(new MyStringProcessor());
 
