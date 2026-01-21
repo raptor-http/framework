@@ -1,4 +1,5 @@
-// interfaces/response-manager.ts
+// deno-lint-ignore-file no-explicit-any
+
 import type Context from "../context.ts";
 import type { ResponseProcessor } from "./response-processor.ts";
 
