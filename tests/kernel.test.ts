@@ -10,8 +10,8 @@ import BadRequest from "../src/error/bad-request.ts";
 import ServerError from "../src/error/server-error.ts";
 import ResponseManager from "../src/response/manager.ts";
 import { ResponseBodyType } from "../src/response/constants/body-type.ts";
-import type { IResponseManager } from "../src/interfaces/response-manager.ts";
-import type { IResponseProcessor } from "../src/interfaces/response-processor.ts";
+import type { ResponseManager } from "../src/interfaces/response-manager.ts";
+import type { ResponseProcessor } from "../src/interfaces/response-processor.ts";
 
 const APP_URL = "http://localhost:8000";
 
@@ -188,7 +188,7 @@ Deno.test("test kernel does not automatically catch error", async () => {
 Deno.test("test custom processor can override internal processor", async () => {
   const app = new Kernel();
 
-  class MyStringProcessor implements IResponseProcessor {
+  class MyStringProcessor implements ResponseProcessor {
     type() {
       return ResponseBodyType.STRING;
     }
@@ -214,10 +214,10 @@ Deno.test("test custom processor can override internal processor", async () => {
 Deno.test("test custom response manager can override internal manager", async () => {
   const app = new Kernel();
 
-  class CustomResponseManager implements IResponseManager {
-    private processors: Map<string, IResponseProcessor> = new Map();
+  class CustomResponseManager implements ResponseManager {
+    private processors: Map<string, ResponseProcessor> = new Map();
 
-    public addProcessor(processor: IResponseProcessor): void {
+    public addProcessor(processor: ResponseProcessor): void {
       this.processors.set(processor.type(), processor);
     }
 
@@ -256,7 +256,7 @@ Deno.test("test custom response manager can override internal manager", async ()
     }
   }
 
-  class MyStringProcessor implements IResponseProcessor {
+  class MyStringProcessor implements ResponseProcessor {
     type() {
       return ResponseBodyType.STRING;
     }

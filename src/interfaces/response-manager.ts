@@ -1,12 +1,12 @@
 // deno-lint-ignore-file no-explicit-any
 
 import type Context from "../context.ts";
-import type { IResponseProcessor } from "./response-processor.ts";
+import type { ResponseProcessor } from "./response-processor.ts";
 
 /**
  * Manages the processing of response bodies into HTTP Response objects.
  */
-export interface IResponseManager {
+export interface ResponseManager {
   /**
    * Process a body into a valid Response object.
    *
@@ -24,5 +24,5 @@ export interface IResponseManager {
    *
    * @returns void
    */
-  addProcessor(processor: IResponseProcessor): void;
+  addProcessor(processor: ResponseProcessor): void;
 }

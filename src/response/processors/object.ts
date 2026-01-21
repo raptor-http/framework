@@ -3,12 +3,12 @@
 import type Context from "../../context.ts";
 import ServerError from "../../error/server-error.ts";
 import { ResponseBodyType } from "../constants/body-type.ts";
-import type { IResponseProcessor } from "../../interfaces/response-processor.ts";
+import type { ResponseProcessor } from "../../interfaces/response-processor.ts";
 
 /**
  * The object processor for HTTP responses.
  */
-export default class ObjectProcessor implements IResponseProcessor {
+export default class ObjectProcessor implements ResponseProcessor {
   /**
    * The response body type the processor handles.
    *

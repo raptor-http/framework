@@ -1,11 +1,11 @@
 import ServerError from "../../error/server-error.ts";
 
-import type { IServerAdapter } from "../../interfaces/server-adapter.ts";
+import type { ServerAdapter } from "../../interfaces/server-adapter.ts";
 
 /**
  * The Bun server implementation for Raptor.
  */
-export default class BunServer implements IServerAdapter {
+export default class BunServer implements ServerAdapter {
   /**
    * Start the server with the given request handler.
    *

@@ -5,7 +5,7 @@ import type Context from "../context.ts";
 /**
  * An HTTP response body processor.
  */
-export interface IResponseProcessor {
+export interface ResponseProcessor {
   /**
    * The response body type the processor handles.
    *

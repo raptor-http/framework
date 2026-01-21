@@ -23,11 +23,11 @@ import ResponseManager from "./src/response/manager.ts";
 import { ResponseBodyType } from "./src/response/constants/body-type.ts";
 
 // Export all available interfaces/types.
-export type { IMiddleware } from "./src/interfaces/middleware.ts";
-export type { IHttpError } from "./src/interfaces/http-error.ts";
-export type { IErrorHandler } from "./src/interfaces/error-handler.ts";
-export type { IResponseManager } from "./src/interfaces/response-manager.ts";
-export type { IResponseProcessor } from "./src/interfaces/response-processor.ts";
+export type { Middleware } from "./src/interfaces/middleware.ts";
+export type { HttpError } from "./src/interfaces/http-error.ts";
+export type { ErrorHandler } from "./src/interfaces/error-handler.ts";
+export type { ResponseManager } from "./src/interfaces/response-manager.ts";
+export type { ResponseProcessor } from "./src/interfaces/response-processor.ts";
 
 export {
   BadRequest,

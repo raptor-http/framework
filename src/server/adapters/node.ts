@@ -1,4 +1,4 @@
-import type { IServerAdapter } from "../../interfaces/server-adapter.ts";
+import type { ServerAdapter } from "../../interfaces/server-adapter.ts";
 
 interface NodeIncomingMessage {
   method?: string;
@@ -19,7 +19,7 @@ interface NodeServerResponse {
 /**
  * The Node server implementation for Raptor.
  */
-export default class NodeServer implements IServerAdapter {
+export default class NodeServer implements ServerAdapter {
   /**
    * Start the server with the given request handler.
    *
