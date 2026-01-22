@@ -57,41 +57,37 @@ export default class ContentNegotiator {
   }
 
   /**
-   * Check if a content-type is acceptable based on the Accept header.
+   * Check if a content-type is acceptable based on the accept header.
    *
-   * @param request The HTTP request with Accept header.
+   * @param request The HTTP request with accept header.
    * @param contentType The content-type to check.
    *
-   * @returns True if the content-type is acceptable.
+   * @returns A boolean indicating if the content-type is acceptable.
    */
   public static isAcceptable(request: Request, contentType: string): boolean {
     const acceptHeader = request.headers.get("accept");
 
-    // No Accept header or wildcard means accept anything
     if (!acceptHeader || acceptHeader === "*/*") {
       return true;
     }
 
     const baseType = contentType.split(";")[0]?.trim().toLowerCase();
+
     const [type] = baseType.split("/");
 
-    // Parse and check each accepted type
     const acceptedTypes = acceptHeader.split(",").map((t) =>
       t.split(";")[0]?.trim().toLowerCase()
     );
 
     for (const accepted of acceptedTypes) {
-      // Exact match
       if (accepted === baseType) {
         return true;
       }
 
-      // Wildcard matches
       if (accepted === "*/*") {
         return true;
       }
 
-      // Subtype wildcard (e.g., application/*)
       if (accepted === `${type}/*`) {
         return true;
       }
