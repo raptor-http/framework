@@ -98,16 +98,16 @@ export default class DefaultResponseManager implements ResponseManager {
    * @returns A string key representing the body type.
    */
   protected getTypeKey(body: any): string {
+    if (typeof body === "string") {
+      return ResponseBodyType.STRING;
+    }
+
     if (body instanceof Response) {
       return ResponseBodyType.RESPONSE;
     }
 
     if (body instanceof Error) {
       return ResponseBodyType.ERROR;
-    }
-
-    if (typeof body === "string") {
-      return ResponseBodyType.STRING;
     }
 
     if (typeof body === "object" && body !== null) {

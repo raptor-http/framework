@@ -44,9 +44,7 @@ export default class Kernel {
    * @constructor
    */
   constructor(options?: KernelOptions) {
-    this.options = options ?? {
-      strictContentNegotiation: true,
-    };
+    this.options = options ?? this.initialiseDefaultOptions();
 
     this.serverManager = new DefaultServerManager();
 
@@ -80,6 +78,17 @@ export default class Kernel {
    */
   public getOptions(): KernelOptions {
     return this.options;
+  }
+
+  /**
+   * Initialises the default kernel options.
+   *
+   * @returns The default kernel options.
+   */
+  public initialiseDefaultOptions(): KernelOptions {
+    return {
+      strictContentNegotiation: false,
+    };
   }
 
   /**
