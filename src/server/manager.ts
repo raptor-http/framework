@@ -47,7 +47,7 @@ export default class Manager implements ServerManager {
    *
    * @returns The name of the adapter to use.
    */
-  private getServerAdapter(): string {
+  protected getServerAdapter(): string {
     // deno-lint-ignore no-explicit-any
     const Bun = (globalThis as any).Bun;
 
