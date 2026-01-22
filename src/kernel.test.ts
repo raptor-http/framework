@@ -17,15 +17,15 @@ const APP_URL = "http://localhost:8000";
 Deno.test("test kernel uses default configuration options.", async () => {
   const app = new Kernel();
 
-  assertEquals(app.getOptions().strictContentNegotiation, true);
+  assertEquals(app.getOptions().strictContentNegotiation, false);
 });
 
 Deno.test("test kernel allows configuration options.", async () => {
   const app = new Kernel({
-    strictContentNegotiation: false,
+    strictContentNegotiation: true,
   });
 
-  assertEquals(app.getOptions().strictContentNegotiation, false);
+  assertEquals(app.getOptions().strictContentNegotiation, true);
 });
 
 // Middleware Registration.

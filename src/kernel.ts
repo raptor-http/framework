@@ -44,7 +44,10 @@ export default class Kernel {
    * @constructor
    */
   constructor(options?: KernelOptions) {
-    this.options = options ?? this.initialiseDefaultOptions();
+    this.options = {
+      ...this.initialiseDefaultOptions(),
+      ...options,
+    };
 
     this.serverManager = new DefaultServerManager();
 
