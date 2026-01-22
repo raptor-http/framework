@@ -1,4 +1,4 @@
-// Copyright 2025, @briward. All rights reserved. MIT license.
+// Copyright 2026, @raptor-http. All rights reserved. MIT license.
 
 import Kernel from "./src/kernel.ts";
 
@@ -19,13 +19,20 @@ import MethodNotAllowed from "./src/error/method-not-allowed.ts";
 import UnprocessableEntity from "./src/error/unprocessable-entity.ts";
 
 // In-built response classes.
+import { ResponseBodyType } from "./src/response/body-type.ts";
 import DefaultResponseManager from "./src/response/manager.ts";
-import { ResponseBodyType } from "./src/response/constants/body-type.ts";
+
+// Response processors.
+import ErrorResponseProcessor from "./src/response/processors/error.ts";
+import StringResponseProcessor from "./src/response/processors/string.ts";
+import ObjectResponseProcessor from "./src/response/processors/object.ts";
+import ResponseObjectResponseProcessor from "./src/response/processors/response-object.ts";
 
 // Export all available interfaces/types.
 export type { Middleware } from "./src/interfaces/middleware.ts";
 export type { HttpError } from "./src/interfaces/http-error.ts";
 export type { ErrorHandler } from "./src/interfaces/error-handler.ts";
+export type { KernelOptions } from "./src/interfaces/kernel-options.ts";
 export type { ResponseManager } from "./src/interfaces/response-manager.ts";
 export type { ResponseProcessor } from "./src/interfaces/response-processor.ts";
 
@@ -34,6 +41,7 @@ export {
   Conflict,
   Context,
   DefaultResponseManager,
+  ErrorResponseProcessor,
   Forbidden,
   Gone,
   ImATeapot,
@@ -41,9 +49,12 @@ export {
   MethodNotAllowed,
   NotAcceptable,
   NotFound,
+  ObjectResponseProcessor,
   RequestTimeout,
   ResponseBodyType,
+  ResponseObjectResponseProcessor,
   ServerError,
+  StringResponseProcessor,
   TooManyRequests,
   Unauthorized,
   UnprocessableEntity,

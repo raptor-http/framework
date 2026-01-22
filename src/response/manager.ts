@@ -1,11 +1,13 @@
 // deno-lint-ignore-file no-explicit-any
 
 import type Context from "../context.ts";
+import { ResponseBodyType } from "./body-type.ts";
 import ServerError from "../error/server-error.ts";
 import ErrorProcessor from "./processors/error.ts";
 import StringProcessor from "./processors/string.ts";
 import ObjectProcessor from "./processors/object.ts";
-import { ResponseBodyType } from "./constants/body-type.ts";
+import NotAcceptable from "../error/not-acceptable.ts";
+import ContentNegotiator from "./content-negotiator.ts";
 import ResponseObjectProcessor from "./processors/response-object.ts";
 import type { ResponseManager } from "../interfaces/response-manager.ts";
 import type { ResponseProcessor } from "../interfaces/response-processor.ts";
@@ -21,26 +23,34 @@ export default class DefaultResponseManager implements ResponseManager {
   private processors: Map<string, ResponseProcessor> = new Map();
 
   /**
+   * Whether strict content negotiation is enabled.
+   */
+  private strictContentNegotiation: boolean;
+
+  /**
    * Initialise the HTTP processor.
    *
-   * @constructor
+   * @param strictContentNegotiation Whether to enable strict content negotiation.
    */
-  constructor() {
-    this.addProcessor(new ResponseObjectProcessor());
-    this.addProcessor(new ErrorProcessor());
-    this.addProcessor(new StringProcessor());
-    this.addProcessor(new ObjectProcessor());
+  constructor(strictContentNegotiation: boolean = true) {
+    this.strictContentNegotiation = strictContentNegotiation;
+
+    this.register("response", new ResponseObjectProcessor());
+    this.register("error", new ErrorProcessor());
+    this.register("string", new StringProcessor());
+    this.register("object", new ObjectProcessor());
   }
 
   /**
    * Add a new processor to the response manager.
    *
+   * @param type The type of request body the processor supports.
    * @param processor An implementation of the processor interface.
    *
    * @returns void
    */
-  public addProcessor(processor: ResponseProcessor): void {
-    this.processors.set(processor.type(), processor);
+  public register(type: string, processor: ResponseProcessor): void {
+    this.processors.set(type, processor);
   }
 
   /**
@@ -48,9 +58,10 @@ export default class DefaultResponseManager implements ResponseManager {
    *
    * @param body A body value to process.
    * @param context The current HTTP context.
+   *
    * @returns A valid HTTP response object.
    */
-  public process(body: any, context: Context): Response | Promise<Response> {
+  public async process(body: any, context: Context): Promise<Response> {
     const typeKey = this.getTypeKey(body);
 
     const processor = this.processors.get(typeKey);
@@ -61,7 +72,22 @@ export default class DefaultResponseManager implements ResponseManager {
       );
     }
 
-    return processor.process(body, context);
+    const response = await processor.process(body, context);
+
+    if (this.strictContentNegotiation) {
+      const contentType = response.headers.get("content-type");
+
+      if (
+        contentType !== null &&
+        !ContentNegotiator.isAcceptable(context.request, contentType)
+      ) {
+        throw new NotAcceptable(
+          `Cannot produce ${contentType} as requested in Accept header`,
+        );
+      }
+    }
+
+    return response;
   }
 
   /**

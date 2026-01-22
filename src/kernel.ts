@@ -1,19 +1,28 @@
 import Context from "./context.ts";
-import BunServer from "./server/adapters/bun.ts";
-import NodeServer from "./server/adapters/node.ts";
-import DenoServer from "./server/adapters/deno.ts";
+import DefaultServerManager from "./server/manager.ts";
 import DefaultResponseManager from "./response/manager.ts";
 
 import type { HttpError } from "./interfaces/http-error.ts";
 import type { Middleware } from "./interfaces/middleware.ts";
 import type { ErrorHandler } from "./interfaces/error-handler.ts";
-import type { ServerAdapter } from "./interfaces/server-adapter.ts";
+import type { ServerManager } from "./interfaces/server-manager.ts";
+import type { KernelOptions } from "./interfaces/kernel-options.ts";
 import type { ResponseManager } from "./interfaces/response-manager.ts";
 
 /**
  * The root initialiser for the framework.
  */
 export default class Kernel {
+  /**
+   * Options which can be used to change kernel functionality.
+   */
+  private options: KernelOptions;
+
+  /**
+   * The server manager for the kernel.
+   */
+  private serverManager: ServerManager;
+
   /**
    * The response manager for the kernel.
    */
@@ -34,8 +43,16 @@ export default class Kernel {
    *
    * @constructor
    */
-  constructor() {
-    this.responseManager = new DefaultResponseManager();
+  constructor(options?: KernelOptions) {
+    this.options = options ?? {
+      strictContentNegotiation: true,
+    };
+
+    this.serverManager = new DefaultServerManager();
+
+    this.responseManager = new DefaultResponseManager(
+      this.options.strictContentNegotiation,
+    );
   }
 
   /**
@@ -57,6 +74,15 @@ export default class Kernel {
   }
 
   /**
+   * Get the configured kernel options.
+   *
+   * @returns The configured kernel options.
+   */
+  public getOptions(): KernelOptions {
+    return this.options;
+  }
+
+  /**
    * Serve the application.
    *
    * @param options Server options.
@@ -64,17 +90,15 @@ export default class Kernel {
   public serve(options?: { port?: number }) {
     const port = options?.port ?? 80;
 
-    const server = this.getServerAdapter();
-
     const handler = (request: Request) => this.respond(request);
 
     if (!options?.port) {
-      server.serve(handler);
+      this.serverManager.serve(handler);
 
       return;
     }
 
-    server.serve(handler, { port });
+    this.serverManager.serve(handler, { port });
 
     console.log(
       `🦖 Raptor started on port ${port}...`,
@@ -106,6 +130,26 @@ export default class Kernel {
   }
 
   /**
+   * Set or override the server manager for the kernel.
+   *
+   * @param manager A valid server manager object.
+   *
+   * @returns void
+   */
+  public setServerManager(manager: ServerManager): void {
+    this.serverManager = manager;
+  }
+
+  /**
+   * Get the currently registered server manager.
+   *
+   * @returns The registered server manager.
+   */
+  public getServerManager(): ServerManager {
+    return this.serverManager;
+  }
+
+  /**
    * Set or override the response manager for the kernel.
    *
    * @param manager A valid response manager object.
@@ -114,6 +158,15 @@ export default class Kernel {
    */
   public setResponseManager(manager: ResponseManager): void {
     this.responseManager = manager;
+  }
+
+  /**
+   * Get the currently registered response manager.
+   *
+   * @returns The registered response manager.
+   */
+  public getResponseManager(): ResponseManager {
+    return this.responseManager;
   }
 
   /**
@@ -232,28 +285,5 @@ export default class Kernel {
    */
   private internalErrorHandler(context: Context): Promise<void> {
     return this.processMiddlewareResponse(context.error, context);
-  }
-
-  /**
-   * Detect the runtime and return correct adapter.
-   *
-   * @returns A server adapter implementation.
-   */
-  private getServerAdapter(): ServerAdapter {
-    // deno-lint-ignore no-explicit-any
-    const Bun = (globalThis as any).Bun;
-
-    // deno-lint-ignore no-explicit-any
-    const Deno = (globalThis as any).Deno;
-
-    if (typeof Deno !== "undefined") {
-      return new DenoServer();
-    }
-
-    if (typeof Bun !== "undefined") {
-      return new BunServer();
-    }
-
-    return new NodeServer();
   }
 }

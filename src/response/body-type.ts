@@ -1,5 +1,5 @@
 /**
- * The body type of the response.
+ * A convenient helper for dealing with response body types.
  */
 export const ResponseBodyType = {
   RESPONSE: "response",

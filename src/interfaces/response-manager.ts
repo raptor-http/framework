@@ -18,11 +18,12 @@ export interface ResponseManager {
   process(body: any, context: Context): Response | Promise<Response>;
 
   /**
-   * Add a new processor to the response manager.
+   * Register a new processor to the response manager.
    *
+   * @param type The type of request body the processor supports.
    * @param processor An implementation of the response processor interface.
    *
    * @returns void
    */
-  addProcessor(processor: ResponseProcessor): void;
+  register(type: string, processor: ResponseProcessor): void;
 }

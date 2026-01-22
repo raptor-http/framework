@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
 
 import type Context from "../../context.ts";
-import { ResponseBodyType } from "../constants/body-type.ts";
+import ContentNegotiator from "../content-negotiator.ts";
 import type { HttpError } from "../../interfaces/http-error.ts";
 import type { ResponseProcessor } from "../../interfaces/response-processor.ts";
 
@@ -9,15 +9,6 @@ import type { ResponseProcessor } from "../../interfaces/response-processor.ts";
  * The plain text processor for HTTP responses.
  */
 export default class ErrorProcessor implements ResponseProcessor {
-  /**
-   * The response body type the processor handles.
-   *
-   * @returns The body type.
-   */
-  type(): ResponseBodyType {
-    return ResponseBodyType.ERROR;
-  }
-
   /**
    * Handle the response and process plain text if found.
    *
@@ -50,7 +41,7 @@ export default class ErrorProcessor implements ResponseProcessor {
    * @returns A valid response object in appropriate content type.
    */
   private transformResponse(error: Error, context: Context): Response {
-    const contentType = context.detectAppropriateContentType();
+    const contentType = ContentNegotiator.negotiate(context.request);
 
     const status = this.isHttpError(error) ? error.status : 500;
     const errors = this.isHttpError(error) ? error.errors : undefined;

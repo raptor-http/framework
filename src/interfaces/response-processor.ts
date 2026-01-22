@@ -7,13 +7,6 @@ import type Context from "../context.ts";
  */
 export interface ResponseProcessor {
   /**
-   * The response body type the processor handles.
-   *
-   * @returns The body type.
-   */
-  type(): string;
-
-  /**
    * Handle the response body and process.
    *
    * @param body Any HTTP response body.
