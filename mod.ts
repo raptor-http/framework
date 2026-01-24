@@ -21,6 +21,7 @@ import UnprocessableEntity from "./src/error/unprocessable-entity.ts";
 // In-built response classes.
 import { ResponseBodyType } from "./src/response/body-type.ts";
 import DefaultResponseManager from "./src/response/manager.ts";
+import ContentNegotiator from "./src/response/content-negotiator.ts";
 
 // Server manager and adapters.
 import DefaultServerManager from "./src/server/manager.ts";
@@ -46,6 +47,7 @@ export {
   BadRequest,
   BunServerAdapter,
   Conflict,
+  ContentNegotiator,
   Context,
   DefaultResponseManager,
   DefaultServerManager,
