@@ -15,7 +15,7 @@ See more information about the Raptor framework here: <a href="https://raptorjs.
 
 ## Installation
 
-For installation instructions, please visit <a href="https://raptorjs.com/docs/getting-started/installation">https://raptorjs.com/docs/getting-started/installation</a>
+For installation instructions, please visit <a href="https://raptorjs.com/docs/installation">https://raptorjs.com/docs/installation</a>
 
 ## Documentation
 
