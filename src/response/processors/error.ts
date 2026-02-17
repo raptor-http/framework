@@ -38,6 +38,7 @@ export default class ErrorProcessor implements ResponseProcessor {
    *
    * @param error The error in the request.
    * @param context The context of the request.
+   *
    * @returns A valid response object in appropriate content type.
    */
   private transformResponse(error: Error, context: Context): Response {
@@ -148,12 +149,26 @@ export default class ErrorProcessor implements ResponseProcessor {
           padding: 0 1rem; 
         }
         h1 { color: #d32f2f; }
+        h2 { margin: 0 0 1rem; }
         .message {
           background: #fcfcfc;
           border: 1px solid #dedede;
           border-radius: 0.25rem;
           padding: 1rem;
           color: #111111;
+        }
+        .error-box {
+          background: #fcfcfc;
+          border: 1px solid #dedede;
+          border-radius: 0.25rem;
+          padding: 1rem;
+          color: #111111;
+        }
+        .error-box ul {
+          margin: 0;
+        }
+        .error-box ul li {
+          margin-bottom: 0.25rem;  
         }
       </style>
     `;
@@ -173,7 +188,6 @@ export default class ErrorProcessor implements ResponseProcessor {
     return `
       <h1>${this.escapeHtml(error.name)}</h1>
       <p class="message">${this.escapeHtml(error.message)}</p>
-      <p>Please check the logs for more information.</p>
       ${errorsList}
     `;
   }
@@ -202,6 +216,11 @@ export default class ErrorProcessor implements ResponseProcessor {
       )
       .join("\n");
 
-    return `<ul>${items}</ul>`;
+    return `
+      <div class="error-box">
+        <h2>Errors</h2>
+        <ul>${items}</ul>
+      </div>
+    `;
   }
 }

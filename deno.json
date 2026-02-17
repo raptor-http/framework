@@ -1,6 +1,6 @@
 {
   "name": "@raptor/framework",
-  "version": "0.16.1",
+  "version": "0.17.0",
   "exports": "./mod.ts",
   "compilerOptions": {
     "lib": ["deno.ns", "deno.window"]
@@ -23,5 +23,8 @@
       "README.md"
     ]
   },
-  "lock": false
+  "lock": false,
+  "imports": {
+    "@std/assert": "jsr:@std/assert@^1.0.18"
+  }
 }

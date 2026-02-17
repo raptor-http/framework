@@ -60,18 +60,26 @@ export default class Kernel {
    * Add a new module to the container.
    *
    * @param middleware An HTTP middleware instance.
+   *
+   * @returns The kernel instance.
    */
-  public add(middleware: Middleware) {
+  public add(middleware: Middleware): this {
     this.middleware.push(middleware);
+
+    return this;
   }
 
   /**
    * Alias method for "add".
    *
    * @param middleware An HTTP middleware instance.
+   *
+   * @returns The kernel instance.
    */
-  public use(middleware: Middleware) {
+  public use(middleware: Middleware): this {
     this.add(middleware);
+
+    return this;
   }
 
   /**
@@ -146,10 +154,12 @@ export default class Kernel {
    *
    * @param manager A valid server manager object.
    *
-   * @returns void
+   * @returns The kernel instance.
    */
-  public setServerManager(manager: ServerManager): void {
+  public setServerManager(manager: ServerManager): this {
     this.serverManager = manager;
+
+    return this;
   }
 
   /**
@@ -166,10 +176,12 @@ export default class Kernel {
    *
    * @param manager A valid response manager object.
    *
-   * @returns void
+   * @returns The kernel instance.
    */
-  public setResponseManager(manager: ResponseManager): void {
+  public setResponseManager(manager: ResponseManager): this {
     this.responseManager = manager;
+
+    return this;
   }
 
   /**
@@ -186,10 +198,12 @@ export default class Kernel {
    *
    * @param handler An error handler function to handle errors.
    *
-   * @returns void
+   * @returns The kernel instance.
    */
-  public catch(handler: ErrorHandler): void {
+  public catch(handler: ErrorHandler): this {
     this.customErrorHandler = handler;
+
+    return this;
   }
 
   /**

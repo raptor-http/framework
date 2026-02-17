@@ -12,6 +12,7 @@ export default class ResponseObjectProcessor implements ResponseProcessor {
    *
    * @param response Any HTTP response object.
    * @param context The current HTTP context.
+   *
    * @returns An HTTP response.
    */
   public process(response: any, _context: Context): Response {
