@@ -1,6 +1,7 @@
-// Copyright 2026, @raptor-http. All rights reserved. MIT license.
+// Copyright 2026, Raptor. All rights reserved. MIT license.
 
 import Kernel from "./src/kernel.ts";
+import helper from "./src/helper.ts";
 
 // In-built errors.
 import Gone from "./src/error/gone.ts";
@@ -36,10 +37,10 @@ import ObjectResponseProcessor from "./src/response/processors/object.ts";
 import ResponseObjectResponseProcessor from "./src/response/processors/response-object.ts";
 
 // Export all available interfaces/types.
+export type { Config } from "./src/config.ts";
 export type { Middleware } from "./src/interfaces/middleware.ts";
 export type { HttpError } from "./src/interfaces/http-error.ts";
 export type { ErrorHandler } from "./src/interfaces/error-handler.ts";
-export type { KernelOptions } from "./src/interfaces/kernel-options.ts";
 export type { ResponseManager } from "./src/interfaces/response-manager.ts";
 export type { ResponseProcessor } from "./src/interfaces/response-processor.ts";
 
@@ -71,3 +72,5 @@ export {
   Unauthorized,
   UnprocessableEntity,
 };
+
+export default helper;

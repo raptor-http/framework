@@ -2,11 +2,11 @@ import Context from "./context.ts";
 import DefaultServerManager from "./server/manager.ts";
 import DefaultResponseManager from "./response/manager.ts";
 
+import type { Config } from "./config.ts";
 import type { HttpError } from "./interfaces/http-error.ts";
 import type { Middleware } from "./interfaces/middleware.ts";
 import type { ErrorHandler } from "./interfaces/error-handler.ts";
 import type { ServerManager } from "./interfaces/server-manager.ts";
-import type { KernelOptions } from "./interfaces/kernel-options.ts";
 import type { ResponseManager } from "./interfaces/response-manager.ts";
 
 /**
@@ -14,9 +14,9 @@ import type { ResponseManager } from "./interfaces/response-manager.ts";
  */
 export default class Kernel {
   /**
-   * Options which can be used to change kernel functionality.
+   * Config which can be used to change kernel functionality.
    */
-  private options: KernelOptions;
+  private config: Config;
 
   /**
    * The server manager for the kernel.
@@ -43,16 +43,16 @@ export default class Kernel {
    *
    * @constructor
    */
-  constructor(options?: KernelOptions) {
-    this.options = {
-      ...this.initialiseDefaultOptions(),
-      ...options,
+  constructor(config?: Config) {
+    this.config = {
+      ...this.initialiseDefaultConfig(),
+      ...config,
     };
 
     this.serverManager = new DefaultServerManager();
 
     this.responseManager = new DefaultResponseManager(
-      this.options.strictContentNegotiation,
+      this.config.strictContentNegotiation,
     );
   }
 
@@ -83,20 +83,20 @@ export default class Kernel {
   }
 
   /**
-   * Get the configured kernel options.
+   * Get the configured kernel config.
    *
-   * @returns The configured kernel options.
+   * @returns The configured kernel config.
    */
-  public getOptions(): KernelOptions {
-    return this.options;
+  public getConfig(): Config {
+    return this.config;
   }
 
   /**
-   * Initialises the default kernel options.
+   * Initialises the default kernel config.
    *
-   * @returns The default kernel options.
+   * @returns The default kernel config.
    */
-  public initialiseDefaultOptions(): KernelOptions {
+  public initialiseDefaultConfig(): Config {
     return {
       strictContentNegotiation: false,
     };
@@ -104,15 +104,13 @@ export default class Kernel {
 
   /**
    * Serve the application.
-   *
-   * @param options Server options.
    */
-  public serve(options?: { port?: number }) {
-    const port = options?.port ?? 80;
+  public serve() {
+    const port = this.config?.port ?? 80;
 
     const handler = (request: Request) => this.respond(request);
 
-    if (!options?.port) {
+    if (!this.config?.port) {
       this.serverManager.serve(handler);
 
       return;
@@ -127,11 +125,9 @@ export default class Kernel {
 
   /**
    * Alias method for "serve".
-   *
-   * @param options Server options.
    */
-  public listen(options?: { port?: number }) {
-    this.serve(options);
+  public listen() {
+    this.serve();
   }
 
   /**

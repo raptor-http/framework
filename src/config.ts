@@ -1,7 +1,14 @@
 /**
- * Options which can be used to change kernel functionality.
+ * Config which can be used to change kernel functionality.
  */
-export interface KernelOptions {
+export interface Config {
+  /**
+   * The port the kernel will use to serve the application.
+   *
+   * Defaults to port 80.
+   */
+  port?: number;
+
   /**
    * Enable strict RFC 7231 content negotiation.
    *
