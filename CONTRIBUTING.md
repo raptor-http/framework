@@ -11,7 +11,7 @@ sharing the project with others.
 ### Report Issues
 
 Found a bug or have a suggestion?
-[Create an issue](https://github.com/raptor-http/framework/issues/new/choose)
+[Create an issue](https://github.com/raptor-js/framework/issues/new/choose)
 using one of our templates:
 
 - **Bug Report** - Something's not working as expected
@@ -83,7 +83,7 @@ Keep commit messages clear and descriptive:
 ### Star the Project
 
 The simplest way to show support! A star on
-[GitHub](https://github.com/raptor-http/framework) helps others discover Raptor.
+[GitHub](https://github.com/raptor-js/framework) helps others discover Raptor.
 
 ### Use the Project
 
@@ -129,7 +129,8 @@ written with Deno in mind so we recommend using Deno when contributing.
 raptor-framework/
 ├── src/
 │   ├── response/          # HTTP handling (Context, Response Management)
-│   ├── interfaces/        # TypeScript interfaces and types
+│   ├── interfaces/        # TypeScript interfaces
+│   ├── types/             # TypeScript types
 │   ├── error/             # Built-in HTTP error classes
 |   └── server/            # Server implementations for runtimes
 ├── examples/              # Example applications
@@ -165,7 +166,7 @@ deno check mod.ts
 
 ## Questions?
 
-- Check out the [documentation](https://raptorframework.com)
-- Browse [existing issues](https://github.com/raptor-http/framework/issues)
+- Check out the [documentation](https://raptorjs.com)
+- Browse [existing issues](https://github.com/raptor-js/framework/issues)
 - Create a
-  [new discussion](https://github.com/raptor-http/framework/issues/new?template=question.yml)
+  [new discussion](https://github.com/raptor-js/framework/issues/new?template=question.yml)
