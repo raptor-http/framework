@@ -11,7 +11,7 @@
 
 ## Raptor Kernel
 
-See more information about the Raptor here: <a href="https://raptorjs.com">https://raptorjs.com</a>.
+See more information about Raptor here: <a href="https://raptorjs.com">https://raptorjs.com</a>.
 
 ## Installation
 
