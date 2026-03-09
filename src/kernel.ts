@@ -236,44 +236,36 @@ export default class Kernel {
    */
   private async executeMiddleware(
     context: Context,
-    startIndex: number = 0,
-  ): Promise<void> {
-    let index = startIndex;
+    index: number,
+  ): Promise<Response | void> {
+    if (index >= this.middleware.length) return;
 
-    while (index < this.middleware.length) {
-      const middleware = this.middleware[index];
+    const middleware = this.middleware[index];
 
-      let nextCalled = false;
+    if (!middleware) return;
 
-      const next = () => {
-        if (nextCalled) {
-          return;
-        }
+    let called = false;
 
-        nextCalled = true;
+    const next = async () => {
+      if (called) return;
 
-        index++;
-      };
+      called = true;
 
-      try {
-        const body = await middleware(context, next);
+      index++;
 
-        if (nextCalled) {
-          continue;
-        }
+      await this.executeMiddleware(context, index);
+    };
 
-        if (body) {
-          await this.processMiddlewareResponse(body, context);
-        }
+    try {
+      const body = await middleware(context, next);
 
-        break;
-      } catch (error) {
-        context.error = error as Error | HttpError;
+      if (called || !body) return;
 
-        await this.processUncaughtError(context);
+      await this.processMiddlewareResponse(body, context);
+    } catch (error) {
+      context.error = error as Error | HttpError;
 
-        break;
-      }
+      await this.processUncaughtError(context);
     }
   }
 
